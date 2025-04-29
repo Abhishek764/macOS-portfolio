@@ -160,7 +160,7 @@ const openAboutWindow = useCallback(() => {
             tracking posts and interactions.
           </p>
           <div className="flex gap-2">
-            <a href="#" className="text-sm bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white">
+            <a href="https://blogging-website-frontend-git-main-abhishek764s-projects.vercel.app/" className="text-sm bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white">
               Demo
             </a>
             <a
