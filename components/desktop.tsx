@@ -6,6 +6,7 @@ import Terminal from "@/components/terminal"
 import PhotoGallery from "@/components/photo-gallery"
 import Certifications from "@/components/certifications"
 import { User, RefreshCw } from "lucide-react"
+import { FaReact, FaDocker, FaAws, FaBlockchain } from "react-icons/fa";
 
 // Import new modular components
 import WindowManager from "@/components/desktop/window-manager"
@@ -64,38 +65,37 @@ export default function Desktop() {
   }, [openWindow])
 
   /**
-   * Opens the About window
-   */
-  const openAboutWindow = useCallback(() => {
-    openWindow(
-      "about",
-      "About Me",
-      <User size={16} />,
-      <div className="p-8 overflow-auto h-full bg-gradient-to-br from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 rounded-xl shadow-lg">
-  <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white tracking-tight">
-    About Me
-  </h2>
-  <p className="mb-6 text-lg leading-relaxed text-gray-800 dark:text-gray-300">
-    I’m <span className="font-semibold text-blue-600 dark:text-blue-400">Abhishek</span>, a passionate and forward-thinking full-stack developer in training, with a strong foundation in modern web technologies and an expanding skill set that includes <span className="font-medium">DevOps practices</span>, <span className="font-medium">blockchain integration</span>, and emerging <span className="font-medium">agentic AI systems</span>.
-    <br /><br />
-    My approach to software development is both holistic and innovation-driven—focusing on building scalable, secure, and high-performance applications aligned with evolving industry standards. I’m currently sharpening my expertise in full-stack frameworks, containerization, CI/CD pipelines, and smart contract development, while exploring the convergence of automation and intelligence in software systems.
-    <br /><br />
-    With a strong belief in continuous learning, clean architecture, and purposeful code, I’m eager to contribute to high-impact teams driving digital transformation and technological innovation.
-  </p>
+ * Opens the About window
+ */
+const openAboutWindow = useCallback(() => {
+  openWindow(
+    "about",
+    "About Me",
+    <User size={16} />,
+    <div className="p-8 overflow-auto h-full bg-gradient-to-br from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 rounded-xl shadow-lg">
+      <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white tracking-tight">
+        About Me
+      </h2>
+      <p className="mb-6 text-lg leading-relaxed text-gray-800 dark:text-gray-300">
+        I’m <span className="font-semibold text-blue-600 dark:text-blue-400">Abhishek</span>, a passionate and forward-thinking full-stack developer in training, with a strong foundation in modern web technologies and an expanding skill set that includes <span className="font-medium">DevOps practices</span>, <span className="font-medium">blockchain integration</span>, and emerging <span className="font-medium">agentic AI systems</span>.
+        <br /><br />
+        My approach to software development is both holistic and innovation-driven—focusing on building scalable, secure, and high-performance applications aligned with evolving industry standards. I’m currently sharpening my expertise in full-stack frameworks, containerization, CI/CD pipelines, and smart contract development, while exploring the convergence of automation and intelligence in software systems.
+        <br /><br />
+        With a strong belief in continuous learning, clean architecture, and purposeful code, I’m eager to contribute to high-impact teams driving digital transformation and technological innovation.
+      </p>
 
-  <h3 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200 border-b pb-2 border-gray-300 dark:border-gray-700">
-    Skills & Tools
-  </h3>
-  <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 text-base">
-    <li><span className="font-medium">Full-stack Development</span> (MERN Stack)</li>
-    <li><span className="font-medium">Cloud Platforms</span> (AWS)</li>
-    <li><span className="font-medium">DevOps & Containerization</span> (Docker, Kubernetes)</li>
-    <li><span className="font-medium">Blockchain Development</span> (Solidity, Smart Contracts)</li>
-  </ul>
-</div>
-
-    )
-  }, [openWindow])
+      <h3 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200 border-b pb-2 border-gray-300 dark:border-gray-700">
+        Skills & Tools
+      </h3>
+      <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 text-base">
+        <li><FaReact className="inline-block mr-2 text-blue-600 dark:text-blue-400" /> <span className="font-medium">Full-stack Development</span> (MERN Stack)</li>
+        <li><FaAws className="inline-block mr-2 text-orange-500 dark:text-orange-400" /> <span className="font-medium">Cloud Platforms</span> (AWS)</li>
+        <li><FaDocker className="inline-block mr-2 text-blue-500 dark:text-blue-300" /> <span className="font-medium">DevOps & Containerization</span> (Docker, Kubernetes)</li>
+        <li><FaBlockchain className="inline-block mr-2 text-gray-800 dark:text-gray-300" /> <span className="font-medium">Blockchain Development</span> (Solidity, Smart Contracts)</li>
+      </ul>
+    </div>
+  );
+}, [openWindow]);
 
   /**
    * Opens the Projects window

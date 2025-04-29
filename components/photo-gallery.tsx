@@ -20,12 +20,12 @@ import {
 const personalPhotos = [
   {
     id: 1,
-    title: "Family Vacation",
-    description: "Summer trip to the beach with family",
-    thumbnail: "/placeholder.svg?height=200&width=300",
-    fullImage: "/placeholder.svg?height=800&width=1200",
-    category: "Family",
-    date: "2023-07-15",
+    title: "Profile Shot",
+    description: "A candid photo of Abhishek",
+    thumbnail: "/photos/abhishek.jpg", // Smaller version or same image if no separate thumbnail
+    fullImage: "/photos/abhishek.jpg", // Full-size image
+    category: "Portrait",
+    date: "2025-04-30",
     favorite: true,
   },
   {
