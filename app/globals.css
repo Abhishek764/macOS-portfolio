@@ -5,6 +5,7 @@
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
+  --accent-color: 0, 122, 255;
 }
 
 .dark {
@@ -15,152 +16,270 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+/* ═══════════════════════════════════════════
+   SCROLLBARS – macOS style
+   ═══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.5);
-  border-radius: 4px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); background-clip: content-box; }
+.dark ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); background-clip: content-box; }
+/* Firefox */
+* { scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.15) transparent; }
+.dark * { scrollbar-color: rgba(255,255,255,0.15) transparent; }
+
+/* ═══════════════════════════════════════════
+   BOOT SCREEN
+   ═══════════════════════════════════════════ */
+@keyframes bootLogoFade {
+  0% { opacity: 0; transform: scale(0.85); }
+  40% { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.boot-logo {
+  animation: bootLogoFade 1s ease-out;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(156, 163, 175, 0.7);
+@keyframes bootProgressFill {
+  0% { width: 0%; }
+  20% { width: 15%; }
+  50% { width: 45%; }
+  75% { width: 70%; }
+  90% { width: 85%; }
+  100% { width: 100%; }
+}
+.boot-progress {
+  animation: bootProgressFill 1.8s ease-in-out forwards;
 }
 
-/* Terminal blinking cursor */
-@keyframes blink {
-  0%,
+/* ═══════════════════════════════════════════
+   WINDOW ANIMATIONS
+   ═══════════════════════════════════════════ */
+@keyframes windowOpen {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
   100% {
     opacity: 1;
-  }
-  50% {
-    opacity: 0;
+    transform: scale(1);
   }
 }
 
+@keyframes windowClose {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.window-opening {
+  animation: windowOpen 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.window-closing {
+  animation: windowClose 0.2s ease-in forwards;
+  pointer-events: none;
+}
+
+/* Window shadow transitions */
+.macos-window-shadow {
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.12),
+    0 22px 70px 4px rgba(0, 0, 0, 0.35),
+    0 0 30px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+.dark .macos-window-shadow {
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.08),
+    0 22px 70px 4px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(0, 0, 0, 0.2);
+}
+.macos-window-shadow-inactive {
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 6px 20px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+.dark .macos-window-shadow-inactive {
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.05),
+    0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ═══════════════════════════════════════════
+   DOCK
+   ═══════════════════════════════════════════ */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-20px); }
+  50% { transform: translateY(-10px); }
+  70% { transform: translateY(-15px); }
+  85% { transform: translateY(-5px); }
+}
+.dock-bounce {
+  animation: bounce 0.6s cubic-bezier(0.28, 0.84, 0.42, 1);
+}
+
+.dock-glass {
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.18),
+    0 10px 50px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Dock icon smooth transitions */
+.dock-icon {
+  transition: transform 0.15s ease-out, margin 0.15s ease-out;
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════
+   CONTEXT MENU
+   ═══════════════════════════════════════════ */
+@keyframes contextMenuIn {
+  0% { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.context-menu-enter {
+  animation: contextMenuIn 0.12s ease-out forwards;
+}
+
+/* ═══════════════════════════════════════════
+   DROPDOWN MENUS
+   ═══════════════════════════════════════════ */
+@keyframes dropdownIn {
+  0% { opacity: 0; transform: translateY(-2px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.dropdown-enter {
+  animation: dropdownIn 0.1s ease-out forwards;
+}
+
+/* ═══════════════════════════════════════════
+   GENERAL ANIMATIONS
+   ═══════════════════════════════════════════ */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Terminal cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
 .cursor-blink::after {
   content: "|";
   animation: blink 1s infinite;
 }
 
-/* macOS dock animations */
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-15px);
-  }
-  60% {
-    transform: translateY(-10px);
-  }
-  80% {
-    transform: translateY(-5px);
-  }
+/* ═══════════════════════════════════════════
+   MICRO-INTERACTIONS
+   ═══════════════════════════════════════════ */
+
+/* Button press feedback */
+.btn-press { transition: transform 0.08s ease; }
+.btn-press:active { transform: scale(0.97); }
+
+/* Smooth progress bar transitions (for widgets) */
+.progress-smooth {
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dock-bounce {
-  animation: bounce 0.6s cubic-bezier(0.28, 0.84, 0.42, 1);
+/* macOS toggle switch */
+.macos-toggle {
+  width: 34px;
+  height: 20px;
+  border-radius: 10px;
+  padding: 2px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
 }
-
-/* Add reflection effect for dock icons */
-.dock-icon-reflection {
-  -webkit-box-reflect: below 2px linear-gradient(to bottom, transparent 50%, rgba(255, 255, 255, 0.1));
+.macos-toggle .toggle-knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
 }
+.macos-toggle.active { background-color: rgb(var(--accent-color)); }
+.macos-toggle.active .toggle-knob { transform: translateX(14px); }
+.macos-toggle:not(.active) { background-color: rgba(0,0,0,0.15); }
+.dark .macos-toggle:not(.active) { background-color: rgba(255,255,255,0.2); }
 
-/* Animation classes */
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.animate-scale-in {
-  animation: scaleIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Button press animation */
-.btn-press {
-  transition: transform 0.1s ease;
-}
-
-.btn-press:active {
-  transform: scale(0.95);
-}
-
-/* Window transition animations */
-.window-enter {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-.window-enter-active {
-  opacity: 1;
-  transform: scale(1);
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-.window-exit {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.window-exit-active {
-  opacity: 0;
-  transform: scale(0.95);
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-/* Icon styling */
-.app-icon {
-  transition: transform 0.2s ease, filter 0.2s ease;
-  will-change: transform;
-}
-
-.app-icon:hover {
-  transform: scale(1.05);
-  filter: brightness(1.1);
-}
-
-/* Window title icon alignment */
-.window-title-icon {
+/* macOS segmented control */
+.segmented-control {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
+  background: rgba(0,0,0,0.06);
+  border-radius: 7px;
+  padding: 2px;
+}
+.dark .segmented-control {
+  background: rgba(255,255,255,0.1);
+}
+.segmented-control button {
+  padding: 4px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  color: rgba(0,0,0,0.6);
+}
+.dark .segmented-control button {
+  color: rgba(255,255,255,0.6);
+}
+.segmented-control button.active {
+  background: white;
+  color: rgba(0,0,0,0.85);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.04);
+}
+.dark .segmented-control button.active {
+  background: rgba(255,255,255,0.18);
+  color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
-
-/* Resize handle hover effects */
-[class*="cursor-"][class*="resize"]:hover {
-  background-color: rgba(59, 130, 246, 0.1);
+/* Settings row styling */
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 0.5px solid rgba(0,0,0,0.08);
+}
+.dark .settings-row {
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+.settings-row:last-child {
+  border-bottom: none;
 }

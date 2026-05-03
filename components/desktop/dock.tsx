@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useCallback } from "react"
+import { useState, useRef, useCallback } from "react"
 import { Linkedin } from "lucide-react"
 
 interface DockProps {
@@ -19,221 +19,120 @@ interface DockProps {
   openLeetCodeProfile: () => void
 }
 
-export default function Dock({
-  windows,
-  openAboutWindow,
-  openProjectsWindow,
-  openResumeWindow,
-  openContactWindow,
-  openGalleryWindow,
-  openCertificationsWindow,
-  openTerminalWindow,
-  openWallpaperSettingsWindow,
-  openLinkedInProfile,
-  openGitHubProfile,
-  openLeetCodeProfile,
-}: DockProps) {
-  /**
-   * Animates a dock icon with a bounce effect
-   * @param event - Mouse event from clicking the icon
-   */
-  const animateDockIcon = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-    const button = event.currentTarget
-    button.classList.add("dock-bounce")
+interface DockItem {
+  id: string
+  label: string
+  windowId?: string
+  onClick: () => void
+  icon: React.ReactNode
+}
 
-    // Remove the animation class after it completes
-    setTimeout(() => {
-      if (button) {
-        button.classList.remove("dock-bounce")
-      }
-    }, 500)
+export default function Dock({
+  windows, openAboutWindow, openProjectsWindow, openResumeWindow, openContactWindow,
+  openGalleryWindow, openCertificationsWindow, openTerminalWindow, openWallpaperSettingsWindow,
+  openLinkedInProfile, openGitHubProfile, openLeetCodeProfile,
+}: DockProps) {
+  const [mouseX, setMouseX] = useState<number | null>(null)
+  const dockRef = useRef<HTMLDivElement>(null)
+  const iconRefs = useRef<(HTMLButtonElement | null)[]>([])
+
+  const BASE_SIZE = 48
+  const MAX_SIZE = 68
+  const EFFECT_DISTANCE = 140
+
+  const getScale = useCallback((index: number): number => {
+    if (mouseX === null || !dockRef.current) return 1
+    const icon = iconRefs.current[index]
+    if (!icon) return 1
+    const iconRect = icon.getBoundingClientRect()
+    const iconCenter = iconRect.left + iconRect.width / 2
+    const distance = Math.abs(mouseX - iconCenter)
+    if (distance > EFFECT_DISTANCE) return 1
+    // Gaussian falloff
+    const scale = 1 + ((MAX_SIZE - BASE_SIZE) / BASE_SIZE) * Math.exp(-((distance * distance) / (2 * (EFFECT_DISTANCE / 2.5) ** 2)))
+    return Math.min(scale, MAX_SIZE / BASE_SIZE)
+  }, [mouseX])
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    setMouseX(e.clientX)
   }, [])
 
+  const handleMouseLeave = useCallback(() => {
+    setMouseX(null)
+  }, [])
+
+  const animateBounce = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const btn = e.currentTarget
+    btn.classList.add("dock-bounce")
+    setTimeout(() => btn?.classList.remove("dock-bounce"), 600)
+  }, [])
+
+  const IconImg = ({ src, alt }: { src: string; alt: string }) => (
+    <img src={src} alt={alt} className="w-full h-full object-cover rounded-xl" draggable={false} />
+  )
+
+  const items: (DockItem | "separator")[] = [
+    { id: "about", label: "About Me", windowId: "about", onClick: openAboutWindow, icon: <IconImg src="/icons/persona.png" alt="About" /> },
+    { id: "projects", label: "Projects", windowId: "projects", onClick: openProjectsWindow, icon: <IconImg src="/icons/code.png" alt="Projects" /> },
+    { id: "resume", label: "Resume", windowId: "resume", onClick: openResumeWindow, icon: <IconImg src="/icons/documents.png" alt="Resume" /> },
+    { id: "certs", label: "Certifications", windowId: "certifications", onClick: openCertificationsWindow, icon: <IconImg src="/icons/certificate.png" alt="Certifications" /> },
+    { id: "contact", label: "Contact", windowId: "contact", onClick: openContactWindow, icon: <IconImg src="/icons/mail.png" alt="Contact" /> },
+    { id: "photos", label: "Photos", windowId: "gallery", onClick: openGalleryWindow, icon: <IconImg src="/icons/photos.png" alt="Photos" /> },
+    "separator",
+    { id: "linkedin", label: "LinkedIn", onClick: openLinkedInProfile, icon: (
+      <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#0077b5] to-[#005582] flex items-center justify-center">
+        <Linkedin className="w-7 h-7 text-white" />
+      </div>
+    )},
+    { id: "github", label: "GitHub", onClick: openGitHubProfile, icon: <IconImg src="/icons/github.png" alt="GitHub" /> },
+    { id: "leetcode", label: "LeetCode", onClick: openLeetCodeProfile, icon: <IconImg src="/icons/leetcode.png" alt="LeetCode" /> },
+    "separator",
+    { id: "terminal", label: "Terminal", windowId: "terminal", onClick: openTerminalWindow, icon: <IconImg src="/icons/terminal.png" alt="Terminal" /> },
+    { id: "settings", label: "System Preferences", windowId: "wallpaper-settings", onClick: openWallpaperSettingsWindow, icon: <IconImg src="/icons/settings.png" alt="Settings" /> },
+  ]
+
+  let iconIndex = 0
+
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-end gap-2 p-2 px-4 bg-white/20 dark:bg-black/20 backdrop-blur-md rounded-2xl z-10 border border-white/10">
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openAboutWindow()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="About Me"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-blue-500/50">
-          <img src="/icons/persona.png" alt="About" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">About</span>
-        {windows.some((w) => w.id === "about") && (
-          <div className="w-1.5 h-1.5 rounded-full bg-white absolute -bottom-1"></div>
-        )}
-      </button>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openProjectsWindow()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="Projects"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-blue-500/50">
-          <img src="/icons/code.png" alt="Projects" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">Projects</span>
-        {windows.some((w) => w.id === "projects") && (
-          <div className="w-1.5 h-1.5 rounded-full bg-white absolute -bottom-1"></div>
-        )}
-      </button>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openResumeWindow()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="Resume"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-green-500/50">
-          <img src="/icons/documents.png" alt="Resume" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">Resume</span>
-        {windows.some((w) => w.id === "resume") && (
-          <div className="w-1.5 h-1.5 rounded-full bg-white absolute -bottom-1"></div>
-        )}
-      </button>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openCertificationsWindow()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="Certifications"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-purple-500/50">
-          <img src="/icons/certificate.png" alt="Certifications" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-          Certifications
-        </span>
-        {windows.some((w) => w.id === "certifications") && (
-          <div className="w-1.5 h-1.5 rounded-full bg-white absolute -bottom-1"></div>
-        )}
-      </button>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openContactWindow()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="Contact"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-blue-500/50">
-          <img src="/icons/mail.png" alt="Contact" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">Contact</span>
-        {windows.some((w) => w.id === "contact") && (
-          <div className="w-1.5 h-1.5 rounded-full bg-white absolute -bottom-1"></div>
-        )}
-      </button>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openGalleryWindow()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="Photos"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-cyan-500/50">
-          <img src="/icons/photos.png" alt="Photos" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">Photos</span>
-        {windows.some((w) => w.id === "gallery") && (
-          <div className="w-1.5 h-1.5 rounded-full bg-white absolute -bottom-1"></div>
-        )}
-      </button>
-
-      <div className="mx-2 h-8 w-px bg-white/20"></div>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openLinkedInProfile()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="LinkedIn Profile"
-      >
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg group-hover:shadow-blue-500/50">
-          <Linkedin className="w-7 h-7 text-white" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">LinkedIn</span>
-      </button>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openGitHubProfile()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="GitHub Profile"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-gray-500/50">
-          <img src="/icons/github.png" alt="GitHub" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">GitHub</span>
-      </button>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openLeetCodeProfile()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="LeetCode Profile"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-yellow-500/50">
-          <img src="/icons/leetcode.png" alt="LeetCode" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">LeetCode</span>
-      </button>
-
-      <div className="mx-2 h-8 w-px bg-white/20"></div>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openTerminalWindow()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="Terminal"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-gray-500/50">
-          <img src="/icons/terminal.png" alt="Terminal" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">Terminal</span>
-        {windows.some((w) => w.id === "terminal") && (
-          <div className="w-1.5 h-1.5 rounded-full bg-white absolute -bottom-1"></div>
-        )}
-      </button>
-
-      <button
-        onClick={(e) => {
-          animateDockIcon(e)
-          openWallpaperSettingsWindow()
-        }}
-        className="group flex flex-col items-center justify-center transition-all duration-200 hover:scale-125 dock-icon-reflection relative"
-        aria-label="Settings"
-      >
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-gray-500/50">
-          <img src="/icons/settings.png" alt="Settings" className="w-full h-full object-cover" />
-        </div>
-        <span className="text-xs mt-1 text-white opacity-0 group-hover:opacity-100 transition-opacity">Settings</span>
-        {windows.some((w) => w.id === "wallpaper-settings") && (
-          <div className="w-1.5 h-1.5 rounded-full bg-white absolute -bottom-1"></div>
-        )}
-      </button>
+    <div
+      ref={dockRef}
+      className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-end gap-[3px] py-[5px] px-[10px] bg-white/15 dark:bg-white/10 backdrop-blur-2xl rounded-[18px] z-10 border border-white/25 dark:border-white/12 dock-glass"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {items.map((item, i) => {
+        if (item === "separator") {
+          return <div key={`sep-${i}`} className="mx-[3px] h-10 w-px bg-white/25 self-center shrink-0" />
+        }
+        const idx = iconIndex++
+        const scale = getScale(idx)
+        const isRunning = item.windowId && windows.some((w) => w.id === item.windowId)
+        return (
+          <button
+            key={item.id}
+            ref={(el) => { iconRefs.current[idx] = el }}
+            onClick={(e) => { animateBounce(e); item.onClick() }}
+            className="group relative flex flex-col items-center dock-icon origin-bottom"
+            style={{ transform: `scale(${scale})`, zIndex: scale > 1.1 ? 10 : 1 }}
+            aria-label={item.label}
+          >
+            {/* Tooltip */}
+            <span className={`absolute left-1/2 -translate-x-1/2 px-2.5 py-[3px] bg-[#1a1a1a]/90 text-white text-[11px] rounded-md pointer-events-none whitespace-nowrap backdrop-blur-sm shadow-lg z-50 transition-all duration-100 ${
+              scale > 1.15 ? "opacity-100 -top-9" : "opacity-0 -top-7"
+            }`}>
+              {item.label}
+            </span>
+            {/* Icon */}
+            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-sm">
+              {item.icon}
+            </div>
+            {/* Running dot */}
+            {isRunning && (
+              <div className="absolute -bottom-[5px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] rounded-full bg-white/80" />
+            )}
+          </button>
+        )
+      })}
     </div>
   )
 }

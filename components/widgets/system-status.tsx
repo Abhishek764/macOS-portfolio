@@ -4,105 +4,58 @@ import { useState, useEffect } from "react"
 import { X, Cpu, MemoryStickIcon as Memory, Disc, Activity, MoreHorizontal } from "lucide-react"
 
 export default function SystemStatusWidget({ onClose }: { onClose: () => void }) {
-  const [cpuUsage, setCpuUsage] = useState(0)
-  const [memoryUsage, setMemoryUsage] = useState(0)
-  const [diskUsage, setDiskUsage] = useState(0)
-  const [networkUsage, setNetworkUsage] = useState(0)
+  const [cpuUsage, setCpuUsage] = useState(42)
+  const [memoryUsage, setMemoryUsage] = useState(65)
+  const [diskUsage, setDiskUsage] = useState(74)
+  const [networkUsage, setNetworkUsage] = useState(28)
 
-  // Simulate changing system metrics
   useEffect(() => {
     const updateMetrics = () => {
-      setCpuUsage(Math.floor(Math.random() * 100))
-      setMemoryUsage(Math.floor(Math.random() * 100))
-      setDiskUsage(70 + Math.floor(Math.random() * 20)) // Keep disk usage high
-      setNetworkUsage(Math.floor(Math.random() * 100))
+      setCpuUsage((prev) => Math.max(5, Math.min(95, prev + (Math.random() - 0.5) * 20)))
+      setMemoryUsage((prev) => Math.max(30, Math.min(90, prev + (Math.random() - 0.5) * 10)))
+      setDiskUsage((prev) => Math.max(60, Math.min(92, prev + (Math.random() - 0.5) * 5)))
+      setNetworkUsage((prev) => Math.max(5, Math.min(85, prev + (Math.random() - 0.5) * 25)))
     }
-
-    // Initial update
-    updateMetrics()
-
-    // Update every 2 seconds
-    const interval = setInterval(updateMetrics, 2000)
-
+    const interval = setInterval(updateMetrics, 2500)
     return () => clearInterval(interval)
   }, [])
 
+  const MetricBar = ({ icon, label, value, color }: {
+    icon: React.ReactNode; label: string; value: number; color: string
+  }) => (
+    <div>
+      <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-center gap-1.5">
+          {icon}
+          <span className="text-[12px] font-medium text-gray-700 dark:text-gray-300">{label}</span>
+        </div>
+        <span className="text-[12px] font-medium text-gray-500 dark:text-gray-400 tabular-nums">{Math.round(value)}%</span>
+      </div>
+      <div className="w-full h-[5px] bg-gray-200/60 dark:bg-white/10 rounded-full overflow-hidden">
+        <div
+          className={`h-full rounded-full progress-smooth ${color}`}
+          style={{ width: `${value}%` }}
+        />
+      </div>
+    </div>
+  )
+
   return (
-    <div className="w-72 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-      <div className="p-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between widget-drag-handle cursor-move">
-        <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">System Status</h3>
-        <div className="flex items-center gap-1">
-          <button className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
-            <MoreHorizontal size={14} className="text-gray-500 dark:text-gray-400" />
-          </button>
-          <button className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700" onClick={onClose}>
-            <X size={14} className="text-gray-500 dark:text-gray-400" />
+    <div className="w-72 bg-white/80 dark:bg-[#2a2a2c]/80 backdrop-blur-2xl rounded-2xl shadow-xl border border-white/50 dark:border-white/10 overflow-hidden">
+      <div className="px-4 py-3 border-b border-black/5 dark:border-white/8 flex items-center justify-between widget-drag-handle cursor-move">
+        <h3 className="text-[13px] font-semibold text-gray-900 dark:text-gray-100">System Status</h3>
+        <div className="flex items-center gap-0.5">
+          <button className="p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors" onClick={onClose}>
+            <X size={12} className="text-gray-400" />
           </button>
         </div>
       </div>
 
-      <div className="p-4 space-y-4">
-        <div>
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center">
-              <Cpu size={14} className="text-blue-500 mr-1.5" />
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">CPU</span>
-            </div>
-            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">{cpuUsage}%</span>
-          </div>
-          <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-500 rounded-full" style={{ width: `${cpuUsage}%` }}></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center">
-              <Memory size={14} className="text-green-500 mr-1.5" />
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Memory</span>
-            </div>
-            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">{memoryUsage}%</span>
-          </div>
-          <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-            <div className="h-full bg-green-500 rounded-full" style={{ width: `${memoryUsage}%` }}></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center">
-              <Disc size={14} className="text-purple-500 mr-1.5" />
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Disk</span>
-            </div>
-            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">{diskUsage}%</span>
-          </div>
-          <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full ${diskUsage > 90 ? "bg-red-500" : "bg-purple-500"}`}
-              style={{ width: `${diskUsage}%` }}
-            ></div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center">
-              <Activity size={14} className="text-yellow-500 mr-1.5" />
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Network</span>
-            </div>
-            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">{networkUsage}%</span>
-          </div>
-          <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-            <div className="h-full bg-yellow-500 rounded-full" style={{ width: `${networkUsage}%` }}></div>
-          </div>
-        </div>
-      </div>
-
-      <div className="px-4 pb-4">
-        <div className="text-xs text-gray-500 dark:text-gray-400 flex justify-between">
-          <span>Last updated: {new Date().toLocaleTimeString()}</span>
-          <button className="text-blue-500 hover:text-blue-600">Refresh</button>
-        </div>
+      <div className="p-4 space-y-3.5">
+        <MetricBar icon={<Cpu size={13} className="text-blue-500" />} label="CPU" value={cpuUsage} color="bg-blue-500" />
+        <MetricBar icon={<Memory size={13} className="text-green-500" />} label="Memory" value={memoryUsage} color="bg-green-500" />
+        <MetricBar icon={<Disc size={13} className="text-purple-500" />} label="Disk" value={diskUsage} color={diskUsage > 90 ? "bg-red-500" : "bg-purple-500"} />
+        <MetricBar icon={<Activity size={13} className="text-orange-500" />} label="Network" value={networkUsage} color="bg-orange-500" />
       </div>
     </div>
   )

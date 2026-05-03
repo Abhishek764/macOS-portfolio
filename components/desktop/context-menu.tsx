@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 interface ContextMenuProps {
   openTerminalWindow: () => void
@@ -12,29 +12,48 @@ interface ContextMenuProps {
 }
 
 export default function ContextMenu({
-  openTerminalWindow,
-  toggleAllWidgets,
-  openWallpaperSettingsWindow,
-  resetWallpaper,
-  areWidgetsVisible,
-  wallpaper,
+  openTerminalWindow, toggleAllWidgets, openWallpaperSettingsWindow,
+  resetWallpaper, areWidgetsVisible, wallpaper,
 }: ContextMenuProps) {
+  const [isVisible, setIsVisible] = useState(false)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        if (menuRef.current.style.display === "block") {
-          menuRef.current.style.display = "none"
-        }
+    const handleClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsVisible(false)
       }
     }
-
-    document.addEventListener("click", handleClickOutside)
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsVisible(false)
+    }
+    document.addEventListener("click", handleClick)
+    document.addEventListener("keydown", handleEscape)
     return () => {
-      document.removeEventListener("click", handleClickOutside)
+      document.removeEventListener("click", handleClick)
+      document.removeEventListener("keydown", handleEscape)
     }
   }, [])
+
+  const handleAction = (action: () => void) => {
+    setIsVisible(false)
+    action()
+  }
+
+  const MenuItem = ({ label, shortcut, onClick }: { label: string; shortcut?: string; onClick: () => void }) => (
+    <button
+      className="w-full text-left px-3 py-[5px] hover:bg-blue-500 hover:text-white text-[13px] transition-colors rounded-[4px] flex items-center justify-between group"
+      onClick={() => handleAction(onClick)}
+    >
+      <span>{label}</span>
+      {shortcut && (
+        <span className="text-[11px] text-gray-400 group-hover:text-white/70 ml-6">{shortcut}</span>
+      )}
+    </button>
+  )
+
+  const Separator = () => <div className="my-[3px] mx-3 border-t border-black/8 dark:border-white/10" />
 
   return (
     <>
@@ -42,52 +61,34 @@ export default function ContextMenu({
         className="absolute inset-0 z-0"
         onContextMenu={(e) => {
           e.preventDefault()
-          if (menuRef.current) {
-            menuRef.current.style.display = "block"
-            menuRef.current.style.left = `${e.clientX}px`
-            menuRef.current.style.top = `${e.clientY}px`
-          }
+          setPosition({ x: e.clientX, y: e.clientY })
+          setIsVisible(true)
         }}
-      ></div>
+      />
 
-      <div ref={menuRef} className="hidden absolute z-50" id="desktop-context-menu">
-        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden w-56 animate-scale-in origin-top-left">
-          <button
-            className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-150"
-            onClick={openTerminalWindow}
-          >
-            <div className="flex items-center gap-2">
-              <img src="/icons/terminal.png" alt="Terminal" className="w-4 h-4" />
-              <span>Open Terminal</span>
-            </div>
-          </button>
-
-          <div className="border-t border-gray-200 dark:border-gray-700"></div>
-
-          <button
-            className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-150"
-            onClick={toggleAllWidgets}
-          >
-            {areWidgetsVisible ? "Hide Widgets" : "Show Widgets"}
-          </button>
-
-          <button
-            className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-150"
-            onClick={openWallpaperSettingsWindow}
-          >
-            Change Wallpaper
-          </button>
-
-          {wallpaper && (
-            <button
-              className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm transition-colors duration-150"
-              onClick={resetWallpaper}
-            >
-              Reset Wallpaper
-            </button>
-          )}
+      {isVisible && (
+        <div
+          ref={menuRef}
+          className="fixed z-50 context-menu-enter"
+          style={{ left: position.x, top: position.y }}
+        >
+          <div className="bg-white/85 dark:bg-[#2a2a2c]/90 backdrop-blur-2xl border border-black/15 dark:border-white/15 rounded-lg shadow-xl overflow-hidden w-[220px] py-[4px] px-[4px]">
+            <MenuItem label="New Finder Window" shortcut="⌘N" onClick={openTerminalWindow} />
+            <Separator />
+            <MenuItem label="Open Terminal" shortcut="⌘T" onClick={openTerminalWindow} />
+            <MenuItem
+              label={areWidgetsVisible ? "Hide Widgets" : "Show Widgets"}
+              shortcut="⌘W"
+              onClick={toggleAllWidgets}
+            />
+            <Separator />
+            <MenuItem label="Change Wallpaper…" onClick={openWallpaperSettingsWindow} />
+            {wallpaper && <MenuItem label="Use Default Wallpaper" onClick={resetWallpaper} />}
+            <Separator />
+            <MenuItem label="Get Info" shortcut="⌘I" onClick={() => {}} />
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

@@ -131,16 +131,11 @@ ___  ___   ___  ___   ___          _    __      _ _
       case "about":
         output = (
           <div className="space-y-2">
-            <p className="text-green-500 font-bold">About Me</p>
-            <p>Hi there! I'm a passionate developer with expertise in web technologies.</p>
-            <p>
-              I specialize in building modern web applications using React, Next.js, and other cutting-edge
-              technologies.
-            </p>
-            <p>
-              With a strong foundation in both frontend and backend development, I create seamless user experiences and
-              robust applications.
-            </p>
+            <p className="text-green-500 font-bold">About Me — Abhishek Kumar</p>
+            <p>Full-stack developer with expertise in MERN stack, DevOps, blockchain, and agentic AI systems.</p>
+            <p>Building scalable, secure, and high-performance applications aligned with evolving industry standards.</p>
+            <p>Skills: React, Node.js, Docker, Kubernetes, AWS, Solidity, LangChain, Terraform</p>
+            <p>Education: B.Tech CSE, Lovely Professional University (2020–2025)</p>
           </div>
         )
         break
@@ -150,24 +145,19 @@ ___  ___   ___  ___   ___          _    __      _ _
           <div className="space-y-2">
             <p className="text-green-500 font-bold">My Projects</p>
             <div>
-              <p className="text-blue-500">E-Commerce Platform</p>
-              <p className="text-xs text-gray-400">Next.js • Tailwind CSS • Prisma • PostgreSQL</p>
-              <p className="text-sm">
-                A full-featured e-commerce solution with cart functionality, user authentication, and payment
-                processing.
-              </p>
+              <p className="text-blue-500">BlockBox</p>
+              <p className="text-xs text-gray-400">React • Solidity • Hardhat • IPFS</p>
+              <p className="text-sm">Blockchain-based platform for secure and decentralized photo sharing with smart contracts.</p>
             </div>
             <div>
-              <p className="text-blue-500">Task Management App</p>
-              <p className="text-xs text-gray-400">React • Redux • Firebase</p>
-              <p className="text-sm">
-                A collaborative task management application with real-time updates and team workspaces.
-              </p>
+              <p className="text-blue-500">TaskSphere</p>
+              <p className="text-xs text-gray-400">React • Node.js • MongoDB • Docker • Kubernetes • AWS</p>
+              <p className="text-sm">Highly scalable To-Do app using three-tier architecture deployed on AWS EKS.</p>
             </div>
             <div>
-              <p className="text-blue-500">Weather Dashboard</p>
-              <p className="text-xs text-gray-400">JavaScript • OpenWeather API • Chart.js</p>
-              <p className="text-sm">A weather visualization dashboard with forecast data and interactive charts.</p>
+              <p className="text-blue-500">Blogging Platform</p>
+              <p className="text-xs text-gray-400">MERN Stack • JWT Authentication</p>
+              <p className="text-sm">Full-featured blogging platform with auth, rich text editor, and dashboard.</p>
             </div>
           </div>
         )
@@ -203,45 +193,11 @@ ___  ___   ___  ___   ___          _    __      _ _
         output = (
           <div className="space-y-2">
             <p className="text-green-500 font-bold">Contact Information</p>
-            <p>
-              Email:{" "}
-              <a href="mailto:example@example.com" className="text-blue-500 underline">
-                example@example.com
-              </a>
-            </p>
-            <p>
-              GitHub:{" "}
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline"
-              >
-                github.com/username
-              </a>
-            </p>
-            <p>
-              LinkedIn:{" "}
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline"
-              >
-                linkedin.com/in/username
-              </a>
-            </p>
-            <p>
-              LeetCode:{" "}
-              <a
-                href="https://leetcode.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline"
-              >
-                leetcode.com/username
-              </a>
-            </p>
+            <p>Email: <a href="mailto:abhishek.sphs01@gmail.com" className="text-blue-500 underline">abhishek.sphs01@gmail.com</a></p>
+            <p>Phone: <a href="tel:+917645990776" className="text-blue-500 underline">+91-7645990776</a></p>
+            <p>GitHub: <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">github.com/Abhishek764</a></p>
+            <p>LinkedIn: <a href="https://www.linkedin.com/in/abhishek-kumar-831056237/" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">linkedin.com/in/abhishek-kumar</a></p>
+            <p>LeetCode: <a href="https://leetcode.com/u/user2044wT/" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">leetcode.com/u/user2044wT</a></p>
           </div>
         )
         break
@@ -251,23 +207,16 @@ ___  ___   ___  ___   ___          _    __      _ _
           <div className="space-y-2">
             <p className="text-green-500 font-bold">My Certifications</p>
             <div>
-              <p className="text-blue-500">AWS Certified Solutions Architect</p>
-              <p className="text-xs text-gray-400">Amazon Web Services • Issued May 2023</p>
-              <p className="text-sm">Validates expertise in designing and deploying scalable systems on AWS.</p>
+              <p className="text-blue-500">Cloud Computing</p>
+              <p className="text-xs text-gray-400">NPTEL • Sept–Nov 2024</p>
             </div>
             <div>
-              <p className="text-blue-500">Certified Kubernetes Administrator</p>
-              <p className="text-xs text-gray-400">Cloud Native Computing Foundation • Issued Feb 2023</p>
-              <p className="text-sm">
-                Demonstrates skills in managing Kubernetes clusters and containerized applications.
-              </p>
+              <p className="text-blue-500">Full Stack Development using MERN</p>
+              <p className="text-xs text-gray-400">CipherSchools • June–July 2024</p>
             </div>
             <div>
-              <p className="text-blue-500">Microsoft Certified: Azure Developer Associate</p>
-              <p className="text-xs text-gray-400">Microsoft • Issued Nov 2022</p>
-              <p className="text-sm">
-                Validates expertise in designing, building, and maintaining cloud applications on Azure.
-              </p>
+              <p className="text-blue-500">Data Structures And Algorithms</p>
+              <p className="text-xs text-gray-400">Udemy (Abdul Bari) • Feb–May 2024</p>
             </div>
             <p className="text-xs text-gray-400 mt-2">
               Type <span className="text-yellow-500">open certifications</span> to view in the Certifications app.

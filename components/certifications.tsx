@@ -9,7 +9,8 @@ interface Certification {
   issueDate: string
   expirationDate?: string
   credentialUrl?: string
-  imageUrl?: string // Added for storing the image URL
+  imageUrl?: string
+  Certificate_ID?: string
 }
 
 export default function Certifications() {
