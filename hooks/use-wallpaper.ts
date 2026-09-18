@@ -10,8 +10,8 @@ export function useWallpaper(showNotification: (message: string) => void) {
   useEffect(() => {
     try {
       // Set default wallpaper path
-      const defaultWallpaper = "/wallpapers/default-wallpaper.jpg"
-      const defaultWallpaperTitle = "Mountain Landscape"
+      const defaultWallpaper = "/wallpapers/sequoia-twilight.jpg"
+      const defaultWallpaperTitle = "Sequoia Twilight"
 
       // Load wallpaper from local storage or use default
       const savedWallpaper = localStorage.getItem("wallpaper") || defaultWallpaper
@@ -54,8 +54,8 @@ export function useWallpaper(showNotification: (message: string) => void) {
   const resetWallpaper = useCallback(() => {
     try {
       // Set default wallpaper instead of null
-      const defaultWallpaper = "/wallpapers/default-wallpaper.jpg"
-      const defaultWallpaperTitle = "Mountain Landscape"
+      const defaultWallpaper = "/wallpapers/sequoia-twilight.jpg"
+      const defaultWallpaperTitle = "Sequoia Twilight"
 
       setWallpaper(defaultWallpaper)
       setWallpaperTitle(defaultWallpaperTitle)

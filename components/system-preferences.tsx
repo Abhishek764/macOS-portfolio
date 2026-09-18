@@ -238,7 +238,7 @@ export default function SystemPreferences({
               <h3 className="text-[13px] font-semibold text-gray-900 dark:text-white mb-4">Current Desktop Picture</h3>
               <div className="aspect-video w-full max-w-md overflow-hidden rounded-lg border border-black/10 dark:border-white/10 mb-3 shadow-sm">
                 <img
-                  src={wallpaper || "/wallpapers/default-wallpaper.jpg"}
+                  src={wallpaper || "/wallpapers/sequoia-twilight.jpg"}
                   alt="Current Wallpaper"
                   className="w-full h-full object-cover"
                 />
