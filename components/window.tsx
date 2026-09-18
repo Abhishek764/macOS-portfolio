@@ -220,6 +220,7 @@ export default function Window({
               isActive ? "bg-[#ff5f57] shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.12)]" : "bg-[#ddd] dark:bg-[#555]"
             } hover:brightness-90`}
             onClick={(e) => { e.stopPropagation(); handleClose() }}
+            aria-label="Close window"
           >
             {trafficLightsHovered && <X size={7} strokeWidth={3} className="text-[#4a0002]" />}
           </button>
@@ -228,6 +229,7 @@ export default function Window({
               isActive ? "bg-[#febc2e] shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.12)]" : "bg-[#ddd] dark:bg-[#555]"
             } hover:brightness-90`}
             onClick={(e) => e.stopPropagation()}
+            aria-label="Minimize window"
           >
             {trafficLightsHovered && <Minus size={7} strokeWidth={3} className="text-[#995700]" />}
           </button>
@@ -236,6 +238,7 @@ export default function Window({
               isActive ? "bg-[#28c840] shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.12)]" : "bg-[#ddd] dark:bg-[#555]"
             } hover:brightness-90`}
             onClick={(e) => { e.stopPropagation(); toggleMaximize() }}
+            aria-label="Maximize window"
           >
             {trafficLightsHovered && <Maximize2 size={6} strokeWidth={3} className="text-[#006500]" />}
           </button>

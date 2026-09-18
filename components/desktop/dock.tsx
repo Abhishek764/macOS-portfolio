@@ -96,7 +96,7 @@ export default function Dock({
   return (
     <div
       ref={dockRef}
-      className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-end gap-[3px] py-[5px] px-[10px] bg-white/15 dark:bg-white/10 backdrop-blur-2xl rounded-[18px] z-10 border border-white/25 dark:border-white/12 dock-glass"
+      className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-end gap-[3px] py-[5px] px-[10px] bg-white/15 dark:bg-white/10 backdrop-blur-2xl rounded-[18px] z-10 border border-white/25 dark:border-white/18 dock-glass"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
@@ -117,7 +117,7 @@ export default function Dock({
             aria-label={item.label}
           >
             {/* Tooltip */}
-            <span className={`absolute left-1/2 -translate-x-1/2 px-2.5 py-[3px] bg-[#1a1a1a]/90 text-white text-[11px] rounded-md pointer-events-none whitespace-nowrap backdrop-blur-sm shadow-lg z-50 transition-all duration-100 ${
+            <span className={`absolute left-1/2 -translate-x-1/2 px-2.5 py-[3px] bg-[#1a1a1a]/90 text-white text-xs rounded-md pointer-events-none whitespace-nowrap backdrop-blur-sm shadow-lg z-50 transition-all duration-100 ${
               scale > 1.15 ? "opacity-100 -top-9" : "opacity-0 -top-7"
             }`}>
               {item.label}
