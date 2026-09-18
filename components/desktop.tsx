@@ -1,14 +1,14 @@
 "use client"
 
-import { useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import MenuBar from "@/components/menu-bar"
 import Terminal from "@/components/terminal"
 import PhotoGallery from "@/components/photo-gallery"
 import Certifications from "@/components/certifications"
 import SystemPreferences from "@/components/system-preferences"
 import { User } from "lucide-react"
-import { FaReact, FaDocker, FaAws } from "react-icons/fa"
-import { SiSolidity } from "react-icons/si"
+import { FaReact, FaDocker, FaAws, FaJenkins } from "react-icons/fa"
+import { SiSolidity, SiKubernetes, SiTerraform } from "react-icons/si"
 
 import WindowManager from "@/components/desktop/window-manager"
 import Dock from "@/components/desktop/dock"
@@ -56,10 +56,10 @@ export default function Desktop() {
           About Me
         </h2>
         <p className="mb-6 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
-          I&apos;m <span className="font-semibold text-blue-600 dark:text-blue-400">Abhishek</span>, a passionate and forward-thinking full-stack developer, with a strong foundation in modern web technologies and an expanding skill set that includes <span className="font-medium">DevOps practices</span>, <span className="font-medium">blockchain integration</span>, and emerging <span className="font-medium">agentic AI systems</span>.
+          I&apos;m <span className="font-semibold text-blue-600 dark:text-blue-400">Abhishek Kumar</span>, a passionate and forward-thinking full-stack developer and DevOps engineer, with a strong foundation in modern web technologies and an expanding skill set that includes <span className="font-medium">CI/CD pipelines</span>, <span className="font-medium">infrastructure as code</span>, <span className="font-medium">blockchain integration</span>, and emerging <span className="font-medium">agentic AI systems</span>.
         </p>
         <p className="mb-6 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
-          My approach to software development is both holistic and innovation-driven—focusing on building scalable, secure, and high-performance applications aligned with evolving industry standards.
+          My approach to software development is both holistic and innovation-driven—focusing on building scalable, secure, and high-performance applications with automated deployment pipelines and cloud-native architectures.
         </p>
         <p className="mb-8 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
           With a strong belief in continuous learning, clean architecture, and purposeful code, I&apos;m eager to contribute to high-impact teams driving digital transformation and technological innovation.
@@ -69,10 +69,13 @@ export default function Desktop() {
           Skills & Tools
         </h3>
         <ul className="space-y-2 text-gray-700 dark:text-gray-300 text-[14px]">
-          <li className="flex items-center gap-2"><FaReact className="text-blue-500" /> <span className="font-medium">Full-stack Development</span> (MERN Stack)</li>
-          <li className="flex items-center gap-2"><FaAws className="text-orange-500" /> <span className="font-medium">Cloud Platforms</span> (AWS)</li>
-          <li className="flex items-center gap-2"><FaDocker className="text-blue-400" /> <span className="font-medium">DevOps & Containerization</span> (Docker, Kubernetes)</li>
+          <li className="flex items-center gap-2"><FaReact className="text-blue-500" /> <span className="font-medium">Full-stack Development</span> (MERN Stack, Next.js)</li>
+          <li className="flex items-center gap-2"><FaAws className="text-orange-500" /> <span className="font-medium">Cloud Platforms</span> (AWS — EC2, S3, Lambda, BedRock, EKS)</li>
+          <li className="flex items-center gap-2"><FaDocker className="text-blue-400" /> <span className="font-medium">Containerization</span> (Docker, Kubernetes)</li>
+          <li className="flex items-center gap-2"><FaJenkins className="text-red-500" /> <span className="font-medium">CI/CD & DevOps</span> (Jenkins, GitHub Actions, Terraform, Ansible)</li>
+          <li className="flex items-center gap-2"><SiKubernetes className="text-blue-600" /> <span className="font-medium">Monitoring & Observability</span> (Prometheus, Grafana)</li>
           <li className="flex items-center gap-2"><SiSolidity className="text-gray-600 dark:text-gray-400" /> <span className="font-medium">Blockchain Development</span> (Solidity, Smart Contracts)</li>
+          <li className="flex items-center gap-2"><SiTerraform className="text-purple-500" /> <span className="font-medium">Infrastructure as Code</span> (Terraform, Ansible)</li>
         </ul>
       </div>,
     )
@@ -128,76 +131,165 @@ export default function Desktop() {
   }, [openWindow])
 
   const openResumeWindow = useCallback(() => {
+    const ResumeContent = () => {
+      const [activeTab, setActiveTab] = useState<"fullstack" | "devops">("fullstack")
+      return (
+        <div className="p-6 overflow-auto h-full bg-white dark:bg-[#1e1e1e] font-sans text-sm text-gray-800 dark:text-gray-200">
+          <div className="flex justify-between items-start mb-4 border-b pb-3 border-gray-200 dark:border-gray-700">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Abhishek Kumar</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <a href="mailto:abhishek.sphs01@gmail.com" className="text-blue-500 hover:underline">abhishek.sphs01@gmail.com</a>
+                {" • "}
+                <a href="tel:+917645990776" className="text-blue-500 hover:underline">+91-7645990776</a>
+              </p>
+            </div>
+            <div className="text-right space-y-1">
+              <a href="https://www.linkedin.com/in/abhishek-kumar-831056237/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline block text-sm">LinkedIn</a>
+              <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline block text-sm">GitHub</a>
+            </div>
+          </div>
+
+          {/* Resume Tab Selector */}
+          <div className="flex gap-1 mb-5 p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg w-fit">
+            <button
+              onClick={() => setActiveTab("fullstack")}
+              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${
+                activeTab === "fullstack"
+                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              Full-Stack Resume
+            </button>
+            <button
+              onClick={() => setActiveTab("devops")}
+              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${
+                activeTab === "devops"
+                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              DevOps Resume
+            </button>
+          </div>
+
+          {activeTab === "fullstack" ? (
+            <>
+              <section className="mb-4">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Skills</h2>
+                <p className="text-sm leading-relaxed">
+                  <strong>Languages:</strong> C++, JavaScript, Python, Java, Solidity, Bash<br />
+                  <strong>Frameworks:</strong> NodeJS, React, Next.js, ExpressJS, Tailwind, Three.js, LangChain<br />
+                  <strong>Cloud:</strong> AWS (EC2, S3, Lambda, BedRock, EKS)<br />
+                  <strong>DevOps:</strong> Docker, Kubernetes, Jenkins, GitHub Actions<br />
+                  <strong>Other:</strong> Git, Figma, MongoDB, PostgreSQL
+                </p>
+              </section>
+
+              <section className="mb-4">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Projects</h2>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  <li><strong>BlockBox</strong> – Blockchain-based photo sharing platform with smart contracts and IPFS.</li>
+                  <li><strong>TaskSphere</strong> – Kubernetes-powered To-Do app using MERN stack and AWS EKS with CI/CD.</li>
+                  <li><strong>Blogging Platform</strong> – Full-stack blog with JWT auth, rich editor, and user dashboard.</li>
+                </ul>
+              </section>
+
+              <section className="mb-4">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Certifications</h2>
+                <ul className="list-disc pl-5 text-sm space-y-0.5">
+                  <li>Cloud Computing (NPTEL, Sept–Nov 2024)</li>
+                  <li>Full Stack MERN (CipherSchools, June–July 2024)</li>
+                  <li>DSA Course by Abdul Bari (Udemy, Feb–May 2024)</li>
+                </ul>
+              </section>
+
+              <section className="mb-4">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Education</h2>
+                <p className="text-sm"><strong>Lovely Professional University</strong> – B.Tech CSE (2020–2025), CGPA: 6.58</p>
+                <p className="text-sm mt-1"><strong>R.K. Dwarika College</strong>, Patna – Intermediate, 69%</p>
+                <p className="text-sm mt-0.5"><strong>Park Mount High School</strong>, Patna – Matriculation, 81%</p>
+              </section>
+
+              <button
+                onClick={() => {
+                  const link = document.createElement("a")
+                  link.href = "/resume/ABHISHEK_13_AUG_2026.pdf"
+                  link.download = "Abhishek-Kumar-FullStack-Resume.pdf"
+                  document.body.appendChild(link)
+                  link.click()
+                  document.body.removeChild(link)
+                  showNotification("Full-Stack resume download started")
+                }}
+                className="mt-2 inline-flex items-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-xs font-medium transition-colors"
+              >
+                ↓ Download Full-Stack Resume (PDF)
+              </button>
+            </>
+          ) : (
+            <>
+              <section className="mb-4">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">DevOps Skills</h2>
+                <p className="text-sm leading-relaxed">
+                  <strong>CI/CD:</strong> Jenkins, GitHub Actions, GitLab CI<br />
+                  <strong>Containerization:</strong> Docker, Kubernetes, Helm<br />
+                  <strong>IaC:</strong> Terraform, Ansible, CloudFormation<br />
+                  <strong>Cloud:</strong> AWS (EC2, S3, Lambda, EKS, ECR, IAM, VPC, CloudWatch)<br />
+                  <strong>Monitoring:</strong> Prometheus, Grafana, ELK Stack<br />
+                  <strong>Scripting:</strong> Bash, Python<br />
+                  <strong>Version Control:</strong> Git, GitHub, GitLab
+                </p>
+              </section>
+
+              <section className="mb-4">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">DevOps Projects</h2>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  <li><strong>TaskSphere (EKS Deployment)</strong> – Three-tier MERN app deployed on AWS EKS with Kubernetes, Docker containerization, and automated CI/CD pipeline.</li>
+                  <li><strong>Infrastructure Automation</strong> – Terraform-based AWS infrastructure provisioning with Ansible configuration management for multi-environment deployments.</li>
+                  <li><strong>Monitoring Stack</strong> – Full observability setup with Prometheus metrics collection, Grafana dashboards, and alerting for containerized microservices.</li>
+                </ul>
+              </section>
+
+              <section className="mb-4">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Certifications</h2>
+                <ul className="list-disc pl-5 text-sm space-y-0.5">
+                  <li>Cloud Computing (NPTEL, Sept–Nov 2024)</li>
+                  <li>Full Stack MERN (CipherSchools, June–July 2024)</li>
+                  <li>DSA Course by Abdul Bari (Udemy, Feb–May 2024)</li>
+                </ul>
+              </section>
+
+              <section className="mb-4">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Education</h2>
+                <p className="text-sm"><strong>Lovely Professional University</strong> – B.Tech CSE (2020–2025), CGPA: 6.58</p>
+              </section>
+
+              <button
+                onClick={() => {
+                  const link = document.createElement("a")
+                  link.href = "/resume/abhishek_devops_sept_18.pdf"
+                  link.download = "Abhishek-Kumar-DevOps-Resume.pdf"
+                  document.body.appendChild(link)
+                  link.click()
+                  document.body.removeChild(link)
+                  showNotification("DevOps resume download started")
+                }}
+                className="mt-2 inline-flex items-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-xs font-medium transition-colors"
+              >
+                ↓ Download DevOps Resume (PDF)
+              </button>
+            </>
+          )}
+        </div>
+      )
+    }
+
     openWindow(
       "resume",
       "Resume",
       <img src="/icons/documents.png" alt="Resume" className="w-4 h-4" />,
-      <div className="p-6 overflow-auto h-full bg-white dark:bg-[#1e1e1e] font-sans text-sm text-gray-800 dark:text-gray-200">
-        <div className="flex justify-between items-start mb-4 border-b pb-3 border-gray-200 dark:border-gray-700">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Abhishek Kumar</h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              <a href="mailto:abhishek.sphs01@gmail.com" className="text-blue-500 hover:underline">abhishek.sphs01@gmail.com</a>
-              {" • "}
-              <a href="tel:+917645990776" className="text-blue-500 hover:underline">+91-7645990776</a>
-            </p>
-          </div>
-          <div className="text-right space-y-1">
-            <a href="https://www.linkedin.com/in/abhishek-kumar-831056237/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline block text-sm">LinkedIn</a>
-            <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline block text-sm">GitHub</a>
-            <button
-              onClick={() => {
-                const link = document.createElement("a")
-                link.href = "/resume/abhishek.pdf"
-                link.download = "Abhishek-Kumar-Resume.pdf"
-                document.body.appendChild(link)
-                link.click()
-                document.body.removeChild(link)
-                showNotification("Resume download started")
-              }}
-              className="mt-2 inline-flex items-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
-            >
-              ↓ Download PDF
-            </button>
-          </div>
-        </div>
-
-        <section className="mb-4">
-          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Skills</h2>
-          <p className="text-sm leading-relaxed">
-            <strong>Languages:</strong> C++, JavaScript, Python, Java, Solidity, Bash<br />
-            <strong>Frameworks:</strong> NodeJS, React, ExpressJS, Tailwind, Three.js, LangChain<br />
-            <strong>Cloud:</strong> AWS (EC2, S3, Lambda, BedRock...)<br />
-            <strong>DevOps:</strong> Jenkins, GitHub Actions, Docker, Kubernetes, Terraform, Ansible<br />
-            <strong>Other:</strong> Git, Figma, Prometheus, Grafana
-          </p>
-        </section>
-
-        <section className="mb-4">
-          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Projects</h2>
-          <ul className="list-disc pl-5 space-y-1 text-sm">
-            <li><strong>BlockBox</strong> – Blockchain-based photo sharing platform with smart contracts and IPFS.</li>
-            <li><strong>TaskSphere</strong> – Kubernetes-powered To-Do app using MERN stack and AWS EKS with CI/CD.</li>
-            <li><strong>Blogging Platform</strong> – Full-stack blog with JWT auth, rich editor, and user dashboard.</li>
-          </ul>
-        </section>
-
-        <section className="mb-4">
-          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Certifications</h2>
-          <ul className="list-disc pl-5 text-sm space-y-0.5">
-            <li>Cloud Computing (NPTEL, Sept–Nov 2024)</li>
-            <li>Full Stack MERN (CipherSchools, June–July 2024)</li>
-            <li>DSA Course by Abdul Bari (Udemy, Feb–May 2024)</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Education</h2>
-          <p className="text-sm"><strong>Lovely Professional University</strong> – B.Tech CSE (2020–2025), CGPA: 6.58</p>
-          <p className="text-sm mt-1"><strong>R.K. Dwarika College</strong>, Patna – Intermediate, 69%</p>
-          <p className="text-sm mt-0.5"><strong>Park Mount High School</strong>, Patna – Matriculation, 81%</p>
-        </section>
-      </div>,
+      <ResumeContent />,
       { x: 100, y: 50 },
       { width: 800, height: 600 },
     )
@@ -338,7 +430,7 @@ export default function Desktop() {
       <div
         className="flex-1 relative overflow-hidden"
         style={{
-          backgroundImage: wallpaper ? `url(${wallpaper})` : "url(/wallpapers/default-wallpaper.jpg)",
+          backgroundImage: wallpaper ? `url(${wallpaper})` : "url(/wallpapers/sequoia-twilight.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
