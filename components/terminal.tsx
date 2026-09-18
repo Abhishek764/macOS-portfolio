@@ -44,7 +44,7 @@ ___  ___   ___  ___   ___          _    __      _ _
             <p className="mb-2">
               Welcome to macOS Portfolio! Type <span className="text-yellow-500">help</span> to see available commands.
             </p>
-            <p className="text-xs text-gray-400">System: macOS Portfolio v1.0.0 | Kernel: Next.js 14.0.0</p>
+            <p className="text-xs text-gray-300">System: macOS Portfolio v2.0.0 | Kernel: Next.js 15.2.4</p>
           </div>
         ),
       },
@@ -95,6 +95,9 @@ ___  ___   ___  ___   ___          _    __      _ _
               <span className="text-yellow-500">contact</span> - Display contact information
             </p>
             <p>
+              <span className="text-yellow-500">resume</span> - Show resume variants
+            </p>
+            <p>
               <span className="text-yellow-500">certifications</span> - View my certifications
             </p>
             <p>
@@ -132,10 +135,10 @@ ___  ___   ___  ___   ___          _    __      _ _
         output = (
           <div className="space-y-2">
             <p className="text-green-500 font-bold">About Me — Abhishek Kumar</p>
-            <p>Full-stack developer with expertise in MERN stack, DevOps, blockchain, and agentic AI systems.</p>
-            <p>Building scalable, secure, and high-performance applications aligned with evolving industry standards.</p>
-            <p>Skills: React, Node.js, Docker, Kubernetes, AWS, Solidity, LangChain, Terraform</p>
-            <p>Education: B.Tech CSE, Lovely Professional University (2020–2025)</p>
+            <p>Full-stack developer & DevOps engineer with expertise in MERN stack, CI/CD, cloud-native architectures, blockchain, and agentic AI systems.</p>
+            <p>Building scalable, secure, and high-performance applications with automated deployment pipelines.</p>
+            <p>Skills: React, Node.js, Next.js, Docker, Kubernetes, AWS, Terraform, Ansible, Jenkins, Solidity, LangChain</p>
+            <p>Education: B.Tech CSE, Lovely Professional University (2020–2025), CGPA: 6.58</p>
           </div>
         )
         break
@@ -170,19 +173,19 @@ ___  ___   ___  ___   ___          _    __      _ _
             <div className="grid grid-cols-2 gap-x-4 gap-y-2">
               <div>
                 <p className="text-blue-500">Languages</p>
-                <p>JavaScript, TypeScript, HTML, CSS, Python</p>
+                <p>C++, JavaScript, Python, Java, Solidity, Bash</p>
               </div>
               <div>
                 <p className="text-blue-500">Frameworks</p>
-                <p>React, Next.js, Express, Vue</p>
+                <p>React, Next.js, Node.js, Express, Tailwind, Three.js, LangChain</p>
               </div>
               <div>
-                <p className="text-blue-500">Tools</p>
-                <p>Git, Docker, Webpack, Jest</p>
+                <p className="text-blue-500">DevOps & Cloud</p>
+                <p>Docker, Kubernetes, AWS, Terraform, Ansible, Jenkins, GitHub Actions</p>
               </div>
               <div>
-                <p className="text-blue-500">Databases</p>
-                <p>MongoDB, PostgreSQL, Firebase</p>
+                <p className="text-blue-500">Monitoring & Tools</p>
+                <p>Prometheus, Grafana, Git, Figma, MongoDB, PostgreSQL</p>
               </div>
             </div>
           </div>
@@ -220,6 +223,26 @@ ___  ___   ___  ___   ___          _    __      _ _
             </div>
             <p className="text-xs text-gray-400 mt-2">
               Type <span className="text-yellow-500">open certifications</span> to view in the Certifications app.
+            </p>
+          </div>
+        )
+        break
+
+      case "resume":
+        output = (
+          <div className="space-y-2">
+            <p className="text-green-500 font-bold">Resume — Abhishek Kumar</p>
+            <p>Two resume variants available:</p>
+            <div>
+              <p className="text-blue-500">1. Full-Stack Resume</p>
+              <p className="text-xs text-gray-300">MERN Stack, Next.js, AWS, Blockchain, AI • ABHISHEK_13_AUG_2026.pdf</p>
+            </div>
+            <div>
+              <p className="text-blue-500">2. DevOps Resume</p>
+              <p className="text-xs text-gray-300">CI/CD, Docker, Kubernetes, Terraform, Ansible • abhishek_devops_sept_18.pdf</p>
+            </div>
+            <p className="text-xs text-gray-300 mt-2">
+              Open the Resume app from the dock to download either version.
             </p>
           </div>
         )
@@ -432,6 +455,7 @@ kMMMMMMMMMMMMMMMMMMMMMMMMWd.
         "projects",
         "skills",
         "contact",
+        "resume",
         "certifications",
         "open certifications",
         "gallery",
