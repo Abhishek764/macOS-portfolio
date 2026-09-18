@@ -91,37 +91,61 @@ export default function Desktop() {
 
         <div className="space-y-4">
           <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">BlockBox</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">React • Solidity • Hardhat • IPFS</p>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">macOS Portfolio</h3>
+              <span className="text-[10px] px-1.5 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full font-medium">Latest</span>
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Next.js 15 • React 19 • Tailwind CSS • TypeScript</p>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              A blockchain-based platform for secure and decentralized photo sharing with smart contracts for secure data transactions and ownership.
+              A pixel-perfect macOS desktop simulator serving as a developer portfolio — complete with draggable windows, dock with physics-based magnification, terminal emulator, and system preferences.
             </p>
             <div className="flex gap-2">
-              <a href="#" className="text-xs bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white transition-colors">Demo</a>
+              <a href="https://abhiyad.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-xs bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white transition-colors">Live</a>
+              <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
+            </div>
+          </div>
+
+          <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">BlockBox</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">React • Solidity • Hardhat • IPFS • Ethereum</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+              A blockchain-based platform for secure and decentralized photo sharing. Uses smart contracts for ownership verification, IPFS for distributed storage, and MetaMask wallet integration.
+            </p>
+            <div className="flex gap-2">
               <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
             </div>
           </div>
 
           <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">TaskSphere</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">React • Node.js • MongoDB • Docker • Kubernetes • AWS</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">React • Node.js • MongoDB • Docker • Kubernetes • AWS EKS • Jenkins</p>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              A highly scalable To-Do List application using a three-tier architecture with containerized services deployed on AWS EKS.
+              A highly scalable To-Do List application using a three-tier architecture — containerized with Docker, orchestrated on AWS EKS, with CI/CD pipelines via Jenkins and GitHub Actions for automated deployments.
             </p>
             <div className="flex gap-2">
-              <a href="#" className="text-xs bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white transition-colors">Demo</a>
+              <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
+            </div>
+          </div>
+
+          <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Infrastructure Automation Suite</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Terraform • Ansible • AWS • Prometheus • Grafana</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+              End-to-end infrastructure automation with Terraform for provisioning AWS resources (VPC, EC2, EKS, S3), Ansible for configuration management, and a full observability stack with Prometheus metrics and Grafana dashboards.
+            </p>
+            <div className="flex gap-2">
               <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
             </div>
           </div>
 
           <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Blogging Platform</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">MERN Stack • JWT Authentication</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">MERN Stack • JWT • Rich Text Editor</p>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              A full-featured blogging platform with user authentication, rich text editor, and personalized dashboard for tracking posts and interactions.
+              A full-featured blogging platform with JWT authentication, a rich text editor for creating posts, personalized dashboard for tracking interactions, and responsive design across all devices.
             </p>
             <div className="flex gap-2">
-              <a href="https://blogging-website-frontend-git-main-abhishek764s-projects.vercel.app/" className="text-xs bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white transition-colors">Demo</a>
+              <a href="https://blogging-website-frontend-git-main-abhishek764s-projects.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-xs bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white transition-colors">Live</a>
               <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
             </div>
           </div>

@@ -27,6 +27,16 @@ const personalPhotos = [
     date: "2025-04-30",
     favorite: true,
   },
+  {
+    id: 2,
+    title: "Mountain view",
+    description: "Mounatin of dharamshala",
+    thumbnail: "/photos/20251004_063418.jpg",
+    fullImage: "/photos/20251004_063418.jpg",
+    category: "Landscape",
+    date: "2025-09-30",
+    favorite: false,
+  },
 ]
 
 interface PhotoGalleryProps {
@@ -112,11 +122,10 @@ export default function PhotoGallery({ onSetWallpaper }: PhotoGalleryProps) {
             <ul className="space-y-0.5">
               <li>
                 <button
-                  className={`w-full text-left px-2 py-1.5 rounded-md text-[13px] flex items-center gap-2 ${
-                    activeView === "all" && !activeCategory
-                      ? "bg-blue-500 text-white"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-800"
-                  }`}
+                  className={`w-full text-left px-2 py-1.5 rounded-md text-[13px] flex items-center gap-2 ${activeView === "all" && !activeCategory
+                    ? "bg-blue-500 text-white"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-800"
+                    }`}
                   onClick={() => {
                     setActiveView("all")
                     setActiveCategory(null)
@@ -128,11 +137,10 @@ export default function PhotoGallery({ onSetWallpaper }: PhotoGalleryProps) {
               </li>
               <li>
                 <button
-                  className={`w-full text-left px-2 py-1.5 rounded-md text-[13px] flex items-center gap-2 ${
-                    activeView === "recents"
-                      ? "bg-blue-500 text-white"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-800"
-                  }`}
+                  className={`w-full text-left px-2 py-1.5 rounded-md text-[13px] flex items-center gap-2 ${activeView === "recents"
+                    ? "bg-blue-500 text-white"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-800"
+                    }`}
                   onClick={() => {
                     setActiveView("recents")
                     setActiveCategory(null)
@@ -144,11 +152,10 @@ export default function PhotoGallery({ onSetWallpaper }: PhotoGalleryProps) {
               </li>
               <li>
                 <button
-                  className={`w-full text-left px-2 py-1.5 rounded-md text-[13px] flex items-center gap-2 ${
-                    activeView === "favorites"
-                      ? "bg-blue-500 text-white"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-800"
-                  }`}
+                  className={`w-full text-left px-2 py-1.5 rounded-md text-[13px] flex items-center gap-2 ${activeView === "favorites"
+                    ? "bg-blue-500 text-white"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-800"
+                    }`}
                   onClick={() => {
                     setActiveView("favorites")
                     setActiveCategory(null)
@@ -172,11 +179,10 @@ export default function PhotoGallery({ onSetWallpaper }: PhotoGalleryProps) {
               {categories.map((category) => (
                 <li key={category}>
                   <button
-                    className={`w-full text-left px-2 py-1.5 rounded-md text-[13px] flex items-center gap-2 ${
-                      activeCategory === category
-                        ? "bg-blue-500 text-white"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-800"
-                    }`}
+                    className={`w-full text-left px-2 py-1.5 rounded-md text-[13px] flex items-center gap-2 ${activeCategory === category
+                      ? "bg-blue-500 text-white"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-800"
+                      }`}
                     onClick={() => {
                       setActiveCategory(category)
                       setActiveView("all")
@@ -222,11 +228,10 @@ export default function PhotoGallery({ onSetWallpaper }: PhotoGalleryProps) {
                   </button>
                   {onSetWallpaper && (
                     <button
-                      className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-colors ${
-                        wallpaperSet
-                          ? "bg-green-500 text-white"
-                          : "bg-blue-500 hover:bg-blue-600 text-white"
-                      }`}
+                      className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-colors ${wallpaperSet
+                        ? "bg-green-500 text-white"
+                        : "bg-blue-500 hover:bg-blue-600 text-white"
+                        }`}
                       onClick={handleSetWallpaper}
                     >
                       <Monitor size={14} />
