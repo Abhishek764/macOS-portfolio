@@ -178,21 +178,19 @@ export default function Desktop() {
           <div className="flex gap-1 mb-5 p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg w-fit">
             <button
               onClick={() => setActiveTab("fullstack")}
-              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${
-                activeTab === "fullstack"
-                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-              }`}
+              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === "fullstack"
+                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                }`}
             >
               Full-Stack Resume
             </button>
             <button
               onClick={() => setActiveTab("devops")}
-              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${
-                activeTab === "devops"
-                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-              }`}
+              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === "devops"
+                ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                }`}
             >
               DevOps Resume
             </button>
@@ -439,7 +437,7 @@ export default function Desktop() {
       }
     }, 500)
     return () => clearTimeout(timer)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
