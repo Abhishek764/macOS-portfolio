@@ -6,7 +6,7 @@ import Terminal from "@/components/terminal"
 import PhotoGallery from "@/components/photo-gallery"
 import Certifications from "@/components/certifications"
 import SystemPreferences from "@/components/system-preferences"
-import { User } from "lucide-react"
+import { User, Folder, HardDrive } from "lucide-react"
 import { FaReact, FaDocker, FaAws, FaJenkins } from "react-icons/fa"
 import { SiSolidity, SiKubernetes, SiTerraform } from "react-icons/si"
 
@@ -23,7 +23,7 @@ import { useWallpaper } from "@/hooks/use-wallpaper"
 export default function Desktop() {
   const { showNotification } = useNotifications()
   const { wallpaper, wallpaperTitle, handleSetWallpaper, resetWallpaper } = useWallpaper(showNotification)
-  const { windows, openWindow, closeWindow, setActiveWindow, updateWindowPosition, updateWindowSize } = useWindows()
+  const { windows, openWindow, closeWindow, minimizeWindow, restoreWindow, setActiveWindow, updateWindowPosition, updateWindowSize } = useWindows()
   const { widgets, areWidgetsVisible, updateWidgetPosition, toggleWidgetVisibility, toggleAllWidgets } = useWidgets()
 
   const desktopRef = useRef<HTMLDivElement>(null)
@@ -31,10 +31,31 @@ export default function Desktop() {
   const openGalleryWindowRef = useRef<() => void>()
   const resetWallpaperRef = useRef<() => void>()
   const openTerminalWindowRef = useRef<() => void>()
+  const [selectedIcon, setSelectedIcon] = useState<string | null>(null)
 
   useEffect(() => {
     return () => { isMountedRef.current = false }
   }, [])
+
+  // Deselect desktop icons when clicking anywhere that isn't one
+  useEffect(() => {
+    const handleMouseDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (!target.closest("[data-desktop-icon]")) setSelectedIcon(null)
+    }
+    document.addEventListener("mousedown", handleMouseDown)
+    return () => document.removeEventListener("mousedown", handleMouseDown)
+  }, [])
+
+  // Dock behaviour: restore/focus a running app instead of spawning a duplicate
+  const handleDockWindowClick = useCallback((windowId: string, openFn: () => void) => {
+    const existing = windows.find((w) => w.id === windowId)
+    if (existing) {
+      restoreWindow(windowId) // un-minimizes and brings to front
+    } else {
+      openFn()
+    }
+  }, [windows, restoreWindow])
 
   const openTerminalWindow = useCallback(() => {
     openWindow(
@@ -42,7 +63,7 @@ export default function Desktop() {
       "Terminal",
       <img src="/icons/terminal.png" alt="Terminal" className="w-4 h-4" />,
       <Terminal />,
-      { x: 100, y: 80 },
+      { x: 340, y: 90 },
     )
   }, [openWindow])
 
@@ -56,10 +77,10 @@ export default function Desktop() {
           About Me
         </h2>
         <p className="mb-6 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
-          I&apos;m <span className="font-semibold text-blue-600 dark:text-blue-400">Abhishek Kumar</span>, a passionate and forward-thinking full-stack developer and DevOps engineer, with a strong foundation in modern web technologies and an expanding skill set that includes <span className="font-medium">CI/CD pipelines</span>, <span className="font-medium">infrastructure as code</span>, <span className="font-medium">blockchain integration</span>, and emerging <span className="font-medium">agentic AI systems</span>.
+          I&apos;m <span className="font-semibold text-blue-600 dark:text-blue-400">Abhishek Kumar</span>, a DevOps engineer and full-stack developer with a strong foundation in modern web technologies and cloud-native infrastructure — spanning <span className="font-medium">CI/CD pipelines</span>, <span className="font-medium">infrastructure as code</span>, <span className="font-medium">GitOps</span>, and <span className="font-medium">AI-powered applications</span>.
         </p>
         <p className="mb-6 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
-          My approach to software development is both holistic and innovation-driven—focusing on building scalable, secure, and high-performance applications with automated deployment pipelines and cloud-native architectures.
+          I&apos;m an active open-source contributor to <span className="font-medium">Open Library (Internet Archive)</span>, with two merged pull requests fixing a cross-thread race condition in FastAPI partials and modernizing core library modules.
         </p>
         <p className="mb-8 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
           With a strong belief in continuous learning, clean architecture, and purposeful code, I&apos;m eager to contribute to high-impact teams driving digital transformation and technological innovation.
@@ -69,13 +90,13 @@ export default function Desktop() {
           Skills & Tools
         </h3>
         <ul className="space-y-2 text-gray-700 dark:text-gray-300 text-[14px]">
-          <li className="flex items-center gap-2"><FaReact className="text-blue-500" /> <span className="font-medium">Full-stack Development</span> (MERN Stack, Next.js)</li>
-          <li className="flex items-center gap-2"><FaAws className="text-orange-500" /> <span className="font-medium">Cloud Platforms</span> (AWS — EC2, S3, Lambda, BedRock, EKS)</li>
-          <li className="flex items-center gap-2"><FaDocker className="text-blue-400" /> <span className="font-medium">Containerization</span> (Docker, Kubernetes)</li>
-          <li className="flex items-center gap-2"><FaJenkins className="text-red-500" /> <span className="font-medium">CI/CD & DevOps</span> (Jenkins, GitHub Actions, Terraform, Ansible)</li>
-          <li className="flex items-center gap-2"><SiKubernetes className="text-blue-600" /> <span className="font-medium">Monitoring & Observability</span> (Prometheus, Grafana)</li>
-          <li className="flex items-center gap-2"><SiSolidity className="text-gray-600 dark:text-gray-400" /> <span className="font-medium">Blockchain Development</span> (Solidity, Smart Contracts)</li>
-          <li className="flex items-center gap-2"><SiTerraform className="text-purple-500" /> <span className="font-medium">Infrastructure as Code</span> (Terraform, Ansible)</li>
+          <li className="flex items-center gap-2"><FaReact className="text-blue-500" /> <span className="font-medium">Full-stack Development</span> (Next.js, React, Node.js, FastAPI)</li>
+          <li className="flex items-center gap-2"><FaAws className="text-orange-500" /> <span className="font-medium">Cloud Platforms</span> (AWS — EKS, EC2, S3, Lambda, IAM, KMS, VPC)</li>
+          <li className="flex items-center gap-2"><FaDocker className="text-blue-400" /> <span className="font-medium">Containers & Orchestration</span> (Docker, Kubernetes, Helm, ArgoCD)</li>
+          <li className="flex items-center gap-2"><FaJenkins className="text-red-500" /> <span className="font-medium">CI/CD & DevSecOps</span> (Jenkins, GitOps, SonarQube, Trivy)</li>
+          <li className="flex items-center gap-2"><SiKubernetes className="text-blue-600" /> <span className="font-medium">Monitoring & Observability</span> (Prometheus, Grafana, exporters)</li>
+          <li className="flex items-center gap-2"><SiTerraform className="text-purple-500" /> <span className="font-medium">Infrastructure as Code</span> (Terraform, eksctl, GitOps)</li>
+          <li className="flex items-center gap-2"><SiSolidity className="text-gray-600 dark:text-gray-400" /> <span className="font-medium">AI & Agentic Systems</span> (LangChain, RAG, generative AI pipelines)</li>
         </ul>
       </div>,
     )
@@ -106,47 +127,58 @@ export default function Desktop() {
           </div>
 
           <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">BlockBox</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">React • Solidity • Hardhat • IPFS • Ethereum</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">AI Music Generation SaaS</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Next.js 15 • TypeScript • FastAPI • AWS • Modal • HuggingFace • Inngest • BetterAuth</p>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              A blockchain-based platform for secure and decentralized photo sharing. Uses smart contracts for ownership verification, IPFS for distributed storage, and MetaMask wallet integration.
+              Cloud-native SaaS generating original music from text prompts by orchestrating 3 generative AI models (ACE-Step, Qwen2-7B, SDXL-Turbo) on AWS. Cut wait time by 40% under peak load with a serverless GPU pipeline on Modal backed by Inngest async job queues and credit-based billing via BetterAuth.
             </p>
             <div className="flex gap-2">
-              <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
+              <a href="https://github.com/Abhishek764/ACE-step-music-gen" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
             </div>
           </div>
 
           <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">TaskSphere</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">React • Node.js • MongoDB • Docker • Kubernetes • AWS EKS • Jenkins</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">AskMedi: RAG Medical Agent</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Python • LangChain • OpenAI • Pinecone • Flask • AWS</p>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              A highly scalable To-Do List application using a three-tier architecture — containerized with Docker, orchestrated on AWS EKS, with CI/CD pipelines via Jenkins and GitHub Actions for automated deployments.
+              RAG-powered agent that retrieves source-grounded data from a structured medical corpus to recommend medicines for diagnosed symptoms — 35% higher accuracy over a keyword-search baseline and sub-2-second latency across 500+ test queries.
             </p>
             <div className="flex gap-2">
-              <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
+              <a href="https://github.com/Abhishek764/AskMedi" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
             </div>
           </div>
 
           <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Infrastructure Automation Suite</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Terraform • Ansible • AWS • Prometheus • Grafana</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Retail Microservices Platform</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Terraform • AWS EKS • Kubernetes • Helm • ArgoCD • GitOps • NGINX • Docker</p>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              End-to-end infrastructure automation with Terraform for provisioning AWS resources (VPC, EC2, EKS, S3), Ansible for configuration management, and a full observability stack with Prometheus metrics and Grafana dashboards.
+              Production-pattern AWS EKS platform provisioned end-to-end with Terraform — VPC across 3 AZs, EKS Auto Mode, customer-managed KMS — with a GitOps bootstrap via ArgoCD so a single terraform apply stands up a self-syncing, self-healing deployment of 5 microservices behind NGINX ingress.
             </p>
             <div className="flex gap-2">
-              <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
+              <a href="https://github.com/Abhishek764/Retail-Microservices-Platform" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
             </div>
           </div>
 
           <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Blogging Platform</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">MERN Stack • JWT • Rich Text Editor</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Starbucks DevSecOps CI/CD Pipeline</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Jenkins • Docker • Kubernetes (EKS) • SonarQube • Trivy • Prometheus • Grafana</p>
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              A full-featured blogging platform with JWT authentication, a rich text editor for creating posts, personalized dashboard for tracking interactions, and responsive design across all devices.
+              Jenkins CI/CD pipeline gating every deployment on static analysis (SonarQube) and container vulnerability scanning (Trivy) before promotion to AWS EKS — instrumented with Prometheus/Grafana and automated security-scan email reports on every build.
+            </p>
+            <div className="flex gap-2">
+              <a href="https://github.com/Abhishek764/starbucks-website-deployment" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
+            </div>
+          </div>
+
+          <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Blogging Website</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Node.js • Express.js • React.js • MongoDB • JWT</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+              Full-featured blogging platform with JWT authentication, CRUD post management, a rich text editor, and a comments/likes system — validated end-to-end across 50 onboarded test users with Jest-based integration tests.
             </p>
             <div className="flex gap-2">
               <a href="https://blogging-website-frontend-git-main-abhishek764s-projects.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-xs bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white transition-colors">Live</a>
-              <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
+              <a href="https://github.com/Abhishek764/blogging-website-backend" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
             </div>
           </div>
         </div>
@@ -163,13 +195,13 @@ export default function Desktop() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Abhishek Kumar</h1>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                <a href="mailto:abhishek.sphs01@gmail.com" className="text-blue-500 hover:underline">abhishek.sphs01@gmail.com</a>
+                <a href="mailto:work.abhishek91@gmail.com" className="text-blue-500 hover:underline">work.abhishek91@gmail.com</a>
                 {" • "}
                 <a href="tel:+917645990776" className="text-blue-500 hover:underline">+91-7645990776</a>
               </p>
             </div>
             <div className="text-right space-y-1">
-              <a href="https://www.linkedin.com/in/abhishek-kumar-831056237/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline block text-sm">LinkedIn</a>
+              <a href="https://www.linkedin.com/in/abhiyad-dev/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline block text-sm">LinkedIn</a>
               <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline block text-sm">GitHub</a>
             </div>
           </div>
@@ -201,20 +233,27 @@ export default function Desktop() {
               <section className="mb-4">
                 <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Skills</h2>
                 <p className="text-sm leading-relaxed">
-                  <strong>Languages:</strong> C++, JavaScript, Python, Java, Solidity, Bash<br />
-                  <strong>Frameworks:</strong> NodeJS, React, Next.js, ExpressJS, Tailwind, Three.js, LangChain<br />
-                  <strong>Cloud:</strong> AWS (EC2, S3, Lambda, BedRock, EKS)<br />
-                  <strong>DevOps:</strong> Docker, Kubernetes, Jenkins, GitHub Actions<br />
-                  <strong>Other:</strong> Git, Figma, MongoDB, PostgreSQL
+                  <strong>Languages:</strong> C++, JavaScript, Python, Java, Bash<br />
+                  <strong>Frameworks:</strong> Next.js, React, Node.js, FastAPI, ExpressJS, Tailwind, LangChain<br />
+                  <strong>Cloud:</strong> AWS (EKS, EC2, S3, Lambda, IAM, KMS, VPC)<br />
+                  <strong>DevOps:</strong> Docker, Kubernetes, Helm, ArgoCD, Jenkins, GitHub Actions, Terraform<br />
+                  <strong>Other:</strong> Git, MongoDB, PostgreSQL, HuggingFace, Pinecone, OpenAI
                 </p>
               </section>
 
               <section className="mb-4">
                 <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Projects</h2>
                 <ul className="list-disc pl-5 space-y-1 text-sm">
-                  <li><strong>BlockBox</strong> – Blockchain-based photo sharing platform with smart contracts and IPFS.</li>
-                  <li><strong>TaskSphere</strong> – Kubernetes-powered To-Do app using MERN stack and AWS EKS with CI/CD.</li>
-                  <li><strong>Blogging Platform</strong> – Full-stack blog with JWT auth, rich editor, and user dashboard.</li>
+                  <li><strong>AI Music Generation SaaS</strong> – Next.js 15 platform orchestrating 3 generative AI models on a Modal serverless GPU pipeline; 40% lower wait time under peak load.</li>
+                  <li><strong>AskMedi (RAG Medical Agent)</strong> – LangChain + OpenAI + Pinecone agent for source-grounded medicine recommendations; 35% higher accuracy than keyword baseline.</li>
+                  <li><strong>Blogging Website</strong> – Full-stack blog with JWT auth, rich text editor, comments/likes; validated across 50 test users with Jest integration tests.</li>
+                </ul>
+              </section>
+
+              <section className="mb-4">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Open Source</h2>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  <li><strong>Open Library (Internet Archive)</strong> – 2 merged PRs: fixed a cross-thread race condition in FastAPI partials and modernized core library modules.</li>
                 </ul>
               </section>
 
@@ -229,7 +268,7 @@ export default function Desktop() {
 
               <section className="mb-4">
                 <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Education</h2>
-                <p className="text-sm"><strong>Lovely Professional University</strong> – B.Tech CSE (2020–2025), CGPA: 6.58</p>
+                <p className="text-sm"><strong>Lovely Professional University</strong> – B.Tech CSE (2020–2025), CGPA: 7.1</p>
                 <p className="text-sm mt-1"><strong>R.K. Dwarika College</strong>, Patna – Intermediate, 69%</p>
                 <p className="text-sm mt-0.5"><strong>Park Mount High School</strong>, Patna – Matriculation, 81%</p>
               </section>
@@ -254,22 +293,22 @@ export default function Desktop() {
               <section className="mb-4">
                 <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">DevOps Skills</h2>
                 <p className="text-sm leading-relaxed">
-                  <strong>CI/CD:</strong> Jenkins, GitHub Actions, GitLab CI<br />
-                  <strong>Containerization:</strong> Docker, Kubernetes, Helm<br />
-                  <strong>IaC:</strong> Terraform, Ansible, CloudFormation<br />
-                  <strong>Cloud:</strong> AWS (EC2, S3, Lambda, EKS, ECR, IAM, VPC, CloudWatch)<br />
-                  <strong>Monitoring:</strong> Prometheus, Grafana, ELK Stack<br />
-                  <strong>Scripting:</strong> Bash, Python<br />
-                  <strong>Version Control:</strong> Git, GitHub, GitLab
+                  <strong>CI/CD:</strong> Jenkins, GitHub Actions, GitOps (ArgoCD)<br />
+                  <strong>Containerization:</strong> Docker, Kubernetes (EKS), Helm<br />
+                  <strong>IaC:</strong> Terraform, eksctl, CloudFormation<br />
+                  <strong>Cloud:</strong> AWS (EKS, EC2, S3, Lambda, ECR, IAM, KMS, VPC, CloudWatch)<br />
+                  <strong>Security:</strong> SonarQube, Trivy, IAM least-privilege, KMS encryption<br />
+                  <strong>Monitoring:</strong> Prometheus, Grafana<br />
+                  <strong>Scripting:</strong> Bash, Python
                 </p>
               </section>
 
               <section className="mb-4">
                 <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">DevOps Projects</h2>
                 <ul className="list-disc pl-5 space-y-1 text-sm">
-                  <li><strong>TaskSphere (EKS Deployment)</strong> – Three-tier MERN app deployed on AWS EKS with Kubernetes, Docker containerization, and automated CI/CD pipeline.</li>
-                  <li><strong>Infrastructure Automation</strong> – Terraform-based AWS infrastructure provisioning with Ansible configuration management for multi-environment deployments.</li>
-                  <li><strong>Monitoring Stack</strong> – Full observability setup with Prometheus metrics collection, Grafana dashboards, and alerting for containerized microservices.</li>
+                  <li><strong>Retail Microservices Platform</strong> – Production-pattern AWS EKS platform built with Terraform (VPC across 3 AZs, EKS Auto Mode, KMS) and GitOps bootstrap via ArgoCD; one terraform apply stands up a self-syncing deployment of 5 microservices behind NGINX ingress.</li>
+                  <li><strong>Starbucks DevSecOps Pipeline</strong> – Jenkins pipeline gating deploys on SonarQube static analysis and Trivy vulnerability scans before promotion to AWS EKS, with Prometheus/Grafana observability and automated security email reports.</li>
+                  <li><strong>AI Music Generation SaaS (Infra)</strong> – AWS deployment of a 3-model generative pipeline using Modal serverless GPUs, Inngest async job queues, and credit-based billing.</li>
                 </ul>
               </section>
 
@@ -284,7 +323,7 @@ export default function Desktop() {
 
               <section className="mb-4">
                 <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">Education</h2>
-                <p className="text-sm"><strong>Lovely Professional University</strong> – B.Tech CSE (2020–2025), CGPA: 6.58</p>
+                <p className="text-sm"><strong>Lovely Professional University</strong> – B.Tech CSE (2020–2025), CGPA: 7.1</p>
               </section>
 
               <button
@@ -335,18 +374,18 @@ export default function Desktop() {
               <p className="text-blue-500">+91-7645990776</p>
             </div>
           </a>
-          <a href="mailto:abhishek.sphs01@gmail.com" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <a href="mailto:work.abhishek91@gmail.com" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">✉️</div>
             <div>
               <p className="font-medium text-gray-900 dark:text-gray-100">Email</p>
-              <p className="text-blue-500">abhishek.sphs01@gmail.com</p>
+              <p className="text-blue-500">work.abhishek91@gmail.com</p>
             </div>
           </a>
-          <a href="https://www.linkedin.com/in/abhishek-kumar-831056237/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <a href="https://www.linkedin.com/in/abhiyad-dev/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">💼</div>
             <div>
               <p className="font-medium text-gray-900 dark:text-gray-100">LinkedIn</p>
-              <p className="text-blue-500">linkedin.com/in/abhishek-kumar</p>
+              <p className="text-blue-500">linkedin.com/in/abhiyad-dev</p>
             </div>
           </a>
           <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
@@ -400,7 +439,7 @@ export default function Desktop() {
   }, [openWindow, wallpaper, wallpaperTitle, openGalleryWindow, resetWallpaper])
 
   const openLinkedInProfile = useCallback(() => {
-    window.open("https://www.linkedin.com/in/abhishek-kumar-831056237/", "_blank", "noopener,noreferrer")
+    window.open("https://www.linkedin.com/in/abhiyad-dev/", "_blank", "noopener,noreferrer")
   }, [])
 
   const openGitHubProfile = useCallback(() => {
@@ -442,21 +481,55 @@ export default function Desktop() {
 
   return (
     <div
-      className="h-screen w-screen overflow-hidden bg-black text-gray-900 dark:text-white flex flex-col"
+      className="h-screen w-screen overflow-hidden bg-black text-gray-900 dark:text-white relative"
       ref={desktopRef}
     >
-      {/* Menu bar */}
-      <MenuBar onToggleWidgets={toggleAllWidgets} areWidgetsVisible={areWidgetsVisible} />
-
-      {/* Desktop area */}
+      {/* Wallpaper — fills the entire screen, including behind the menu bar */}
       <div
-        className="flex-1 relative overflow-hidden"
+        className="absolute inset-0"
         style={{
           backgroundImage: wallpaper ? `url(${wallpaper})` : "url(/wallpapers/sequoia-twilight.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      >
+      />
+
+      {/* Menu bar — translucent overlay floating on the wallpaper */}
+      <MenuBar onToggleWidgets={toggleAllWidgets} areWidgetsVisible={areWidgetsVisible} />
+
+      {/* Desktop area (windows, widgets, icons) — below the menu bar */}
+      <div className="absolute inset-x-0 top-[26px] bottom-0 overflow-hidden">
+        {/* Desktop icons */}
+        <div className="absolute top-3 right-3 z-[5] flex flex-col items-center gap-5 select-none pointer-events-none">
+          <button
+            data-desktop-icon
+            className={`pointer-events-auto flex flex-col items-center gap-1 p-1 rounded-md ${selectedIcon === "macintosh-hd" ? "bg-blue-500/40" : ""}`}
+            onClick={() => setSelectedIcon("macintosh-hd")}
+            onDoubleClick={openAboutWindow}
+          >
+            <HardDrive size={42} strokeWidth={1.2} className="text-white/95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]" />
+            <span className="text-[11px] text-white font-medium px-1 rounded desktop-icon-label">Macintosh HD</span>
+          </button>
+          <button
+            data-desktop-icon
+            className={`pointer-events-auto flex flex-col items-center gap-1 p-1 rounded-md ${selectedIcon === "projects-folder" ? "bg-blue-500/40" : ""}`}
+            onClick={() => setSelectedIcon("projects-folder")}
+            onDoubleClick={openProjectsWindow}
+          >
+            <Folder size={42} strokeWidth={1.2} fill="#63b3f7" className="text-[#3d8fd1] drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]" />
+            <span className="text-[11px] text-white font-medium px-1 rounded desktop-icon-label">Projects</span>
+          </button>
+          <button
+            data-desktop-icon
+            className={`pointer-events-auto flex flex-col items-center gap-1 p-1 rounded-md ${selectedIcon === "resume-pdf" ? "bg-blue-500/40" : ""}`}
+            onClick={() => setSelectedIcon("resume-pdf")}
+            onDoubleClick={openResumeWindow}
+          >
+            <img src="/icons/documents.png" alt="Resume.pdf" className="w-[42px] h-[42px] object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]" draggable={false} />
+            <span className="text-[11px] text-white font-medium px-1 rounded desktop-icon-label">Resume.pdf</span>
+          </button>
+        </div>
+
         {/* Widgets */}
         <WidgetsContainer
           widgets={widgets}
@@ -480,6 +553,7 @@ export default function Desktop() {
         <WindowManager
           windows={windows}
           onClose={closeWindow}
+          onMinimize={minimizeWindow}
           onFocus={setActiveWindow}
           onDrag={updateWindowPosition}
           onResize={updateWindowSize}
@@ -500,6 +574,7 @@ export default function Desktop() {
         openLinkedInProfile={openLinkedInProfile}
         openGitHubProfile={openGitHubProfile}
         openLeetCodeProfile={openLeetCodeProfile}
+        onDockWindowClick={handleDockWindowClick}
       />
     </div>
   )

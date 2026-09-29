@@ -32,14 +32,13 @@ export default function Terminal() {
             <div className="flex justify-center mb-4">
               <img src="/icons/terminal.png" alt="Terminal" className="w-16 h-16" />
             </div>
-            <pre className="font-mono text-xs sm:text-sm whitespace-pre overflow-x-auto">
-              {`
-___  ___   ___  ___   ___          _    __      _ _       
-|  \\/  | | / _ \\ / __| | _ \\___  _ _| |_ / _|___ | (_)___   
-| |\\/| | |/ (_) |\\__ \\ |  _/ _ \\| '_|  _|  _/ _ \\| | / _ \\  
-|_|  |_|_|\\___/ |___/ |_| \\___/|_|  \\__|_| \\___/|_|_\\___/  
-                                                          
-`}
+            <pre className="font-mono text-[10px] sm:text-xs whitespace-pre overflow-x-auto leading-tight text-green-400">
+{` █████╗ ██████╗ ██╗  ██╗██╗███████╗██╗  ██╗███████╗██╗  ██╗
+██╔══██╗██╔══██╗██║  ██║██║██╔════╝██║  ██║██╔════╝██║  ██║
+███████║██████╔╝███████║██║█████╗  ███████║█████╗  ███████║
+██╔══██║██╔══██╗██╔══██║██║██╔══╝  ██╔══██║██╔══╝  ██╔══██║
+██║  ██║██████╔╝██║  ██║██║███████╗██║  ██║███████╗██║  ██║
+╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝`}
             </pre>
             <p className="mb-2">
               Welcome to macOS Portfolio! Type <span className="text-yellow-500">help</span> to see available commands.
@@ -135,10 +134,10 @@ ___  ___   ___  ___   ___          _    __      _ _
         output = (
           <div className="space-y-2">
             <p className="text-green-500 font-bold">About Me — Abhishek Kumar</p>
-            <p>Full-stack developer & DevOps engineer with expertise in MERN stack, CI/CD, cloud-native architectures, blockchain, and agentic AI systems.</p>
-            <p>Building scalable, secure, and high-performance applications with automated deployment pipelines.</p>
-            <p>Skills: React, Node.js, Next.js, Docker, Kubernetes, AWS, Terraform, Ansible, Jenkins, Solidity, LangChain</p>
-            <p>Education: B.Tech CSE, Lovely Professional University (2020–2025), CGPA: 6.58</p>
+            <p>DevOps engineer & full-stack developer with expertise in AWS, Kubernetes, CI/CD, GitOps, and AI-powered applications.</p>
+            <p>Open-source contributor to Open Library (Internet Archive) — 2 merged PRs.</p>
+            <p>Skills: Next.js, React, Node.js, FastAPI, Docker, Kubernetes, AWS, Terraform, ArgoCD, Jenkins, LangChain</p>
+            <p>Education: B.Tech CSE, Lovely Professional University (2020–2025), CGPA: 7.1</p>
           </div>
         )
         break
@@ -148,19 +147,29 @@ ___  ___   ___  ___   ___          _    __      _ _
           <div className="space-y-2">
             <p className="text-green-500 font-bold">My Projects</p>
             <div>
-              <p className="text-blue-500">BlockBox</p>
-              <p className="text-xs text-gray-400">React • Solidity • Hardhat • IPFS</p>
-              <p className="text-sm">Blockchain-based platform for secure and decentralized photo sharing with smart contracts.</p>
+              <p className="text-blue-500">AI Music Generation SaaS</p>
+              <p className="text-xs text-gray-400">Next.js 15 • FastAPI • Modal • HuggingFace • Inngest • AWS</p>
+              <p className="text-sm">Cloud-native SaaS orchestrating 3 generative AI models on serverless GPUs; 40% lower wait time under peak load.</p>
             </div>
             <div>
-              <p className="text-blue-500">TaskSphere</p>
-              <p className="text-xs text-gray-400">React • Node.js • MongoDB • Docker • Kubernetes • AWS</p>
-              <p className="text-sm">Highly scalable To-Do app using three-tier architecture deployed on AWS EKS.</p>
+              <p className="text-blue-500">AskMedi: RAG Medical Agent</p>
+              <p className="text-xs text-gray-400">LangChain • OpenAI • Pinecone • Flask • AWS</p>
+              <p className="text-sm">Source-grounded medicine recommendations; 35% higher accuracy than keyword baseline.</p>
             </div>
             <div>
-              <p className="text-blue-500">Blogging Platform</p>
-              <p className="text-xs text-gray-400">MERN Stack • JWT Authentication</p>
-              <p className="text-sm">Full-featured blogging platform with auth, rich text editor, and dashboard.</p>
+              <p className="text-blue-500">Retail Microservices Platform</p>
+              <p className="text-xs text-gray-400">Terraform • AWS EKS • Helm • ArgoCD • GitOps • NGINX</p>
+              <p className="text-sm">One terraform apply stands up a self-syncing ArgoCD deployment of 5 microservices.</p>
+            </div>
+            <div>
+              <p className="text-blue-500">Starbucks DevSecOps Pipeline</p>
+              <p className="text-xs text-gray-400">Jenkins • Docker • EKS • SonarQube • Trivy • Prometheus • Grafana</p>
+              <p className="text-sm">Security-gated CI/CD with static analysis and vulnerability scanning before EKS promotion.</p>
+            </div>
+            <div>
+              <p className="text-blue-500">Blogging Website</p>
+              <p className="text-xs text-gray-400">Node.js • Express.js • React.js • MongoDB • JWT</p>
+              <p className="text-sm">Full-featured blog with auth, rich text editor, and comments/likes.</p>
             </div>
           </div>
         )
@@ -173,19 +182,19 @@ ___  ___   ___  ___   ___          _    __      _ _
             <div className="grid grid-cols-2 gap-x-4 gap-y-2">
               <div>
                 <p className="text-blue-500">Languages</p>
-                <p>C++, JavaScript, Python, Java, Solidity, Bash</p>
+                <p>C++, JavaScript, Python, Java, Bash</p>
               </div>
               <div>
                 <p className="text-blue-500">Frameworks</p>
-                <p>React, Next.js, Node.js, Express, Tailwind, Three.js, LangChain</p>
+                <p>Next.js, React, Node.js, FastAPI, Express, Tailwind, LangChain</p>
               </div>
               <div>
                 <p className="text-blue-500">DevOps & Cloud</p>
-                <p>Docker, Kubernetes, AWS, Terraform, Ansible, Jenkins, GitHub Actions</p>
+                <p>Docker, Kubernetes (EKS), Helm, ArgoCD, Jenkins, Terraform, AWS</p>
               </div>
               <div>
-                <p className="text-blue-500">Monitoring & Tools</p>
-                <p>Prometheus, Grafana, Git, Figma, MongoDB, PostgreSQL</p>
+                <p className="text-blue-500">Security & Monitoring</p>
+                <p>SonarQube, Trivy, KMS, IAM, Prometheus, Grafana, Git</p>
               </div>
             </div>
           </div>
@@ -196,10 +205,10 @@ ___  ___   ___  ___   ___          _    __      _ _
         output = (
           <div className="space-y-2">
             <p className="text-green-500 font-bold">Contact Information</p>
-            <p>Email: <a href="mailto:abhishek.sphs01@gmail.com" className="text-blue-500 underline">abhishek.sphs01@gmail.com</a></p>
+            <p>Email: <a href="mailto:work.abhishek91@gmail.com" className="text-blue-500 underline">work.abhishek91@gmail.com</a></p>
             <p>Phone: <a href="tel:+917645990776" className="text-blue-500 underline">+91-7645990776</a></p>
             <p>GitHub: <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">github.com/Abhishek764</a></p>
-            <p>LinkedIn: <a href="https://www.linkedin.com/in/abhishek-kumar-831056237/" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">linkedin.com/in/abhishek-kumar</a></p>
+            <p>LinkedIn: <a href="https://www.linkedin.com/in/abhiyad-dev/" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">linkedin.com/in/abhiyad-dev</a></p>
             <p>LeetCode: <a href="https://leetcode.com/u/user2044wT/" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">leetcode.com/u/user2044wT</a></p>
           </div>
         )
@@ -235,11 +244,11 @@ ___  ___   ___  ___   ___          _    __      _ _
             <p>Two resume variants available:</p>
             <div>
               <p className="text-blue-500">1. Full-Stack Resume</p>
-              <p className="text-xs text-gray-300">MERN Stack, Next.js, AWS, Blockchain, AI • ABHISHEK_13_AUG_2026.pdf</p>
+              <p className="text-xs text-gray-300">Next.js, FastAPI, AWS, AI/ML, Open Source • ABHISHEK_13_AUG_2026.pdf</p>
             </div>
             <div>
               <p className="text-blue-500">2. DevOps Resume</p>
-              <p className="text-xs text-gray-300">CI/CD, Docker, Kubernetes, Terraform, Ansible • abhishek_devops_sept_18.pdf</p>
+              <p className="text-xs text-gray-300">Terraform, EKS, Jenkins, ArgoCD, GitOps, SonarQube • abhishek_devops_sept_18.pdf</p>
             </div>
             <p className="text-xs text-gray-300 mt-2">
               Open the Resume app from the dock to download either version.
@@ -521,7 +530,7 @@ kMMMMMMMMMMMMMMMMMMMMMMMMWd.
   return (
     <div
       ref={terminalRef}
-      className="h-full bg-gray-900 text-white font-mono p-4 overflow-y-auto"
+      className="h-full bg-[#1d1d20] text-white font-mono p-4 overflow-y-auto"
       onClick={() => inputRef.current?.focus()}
     >
       {/* Command history */}
@@ -530,7 +539,7 @@ kMMMMMMMMMMMMMMMMMMMMMMMMWd.
           <div key={index}>
             {item.command && (
               <div className="flex items-center gap-1">
-                <span className="text-green-500">user@macOS:~$</span>
+                <span className="text-green-500">abhishek@macbook-pro</span> <span className="text-blue-400">~</span> <span className="text-gray-400">%</span>
                 <span>{item.command}</span>
               </div>
             )}
@@ -541,7 +550,7 @@ kMMMMMMMMMMMMMMMMMMMMMMMMWd.
 
       {/* Input line */}
       <form onSubmit={handleSubmit} className="flex items-center gap-1">
-        <span className="text-green-500">user@macOS:~$</span>
+        <span className="text-green-500">abhishek@macbook-pro</span> <span className="text-blue-400">~</span> <span className="text-gray-400">%</span>
         <input
           ref={inputRef}
           type="text"

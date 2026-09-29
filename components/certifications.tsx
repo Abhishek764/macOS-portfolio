@@ -30,7 +30,7 @@ export default function Certifications() {
 
   // Load certifications from localStorage on mount
   useEffect(() => {
-    const savedCertifications = localStorage.getItem("portfolio-certifications")
+    const savedCertifications = localStorage.getItem("portfolio-certifications-v2")
     if (savedCertifications) {
       try {
         setCertifications(JSON.parse(savedCertifications))
@@ -38,18 +38,18 @@ export default function Certifications() {
         console.error("Failed to parse saved certifications", e)
         // Set default certifications if parsing fails
         setCertifications(getDefaultCertifications())
-        localStorage.setItem("portfolio-certifications", JSON.stringify(getDefaultCertifications()))
+        localStorage.setItem("portfolio-certifications-v2", JSON.stringify(getDefaultCertifications()))
       }
     } else {
       // Set default certifications if none exist
       setCertifications(getDefaultCertifications())
-      localStorage.setItem("portfolio-certifications", JSON.stringify(getDefaultCertifications()))
+      localStorage.setItem("portfolio-certifications-v2", JSON.stringify(getDefaultCertifications()))
     }
   }, [])
 
   // Save certifications to localStorage when they change
   useEffect(() => {
-    localStorage.setItem("portfolio-certifications", JSON.stringify(certifications))
+    localStorage.setItem("portfolio-certifications-v2", JSON.stringify(certifications))
   }, [certifications])
 
   // Default certifications for demo purposes
@@ -60,14 +60,12 @@ export default function Certifications() {
         name: "Cloud Computing",
         organization: "NPTEL",
         issueDate: "2024-11-29",
-        credentialUrl: "https://aws.amazon.com/certification/",
       },
       {
         id: "2",
-        name: "Data Structures And Algorithms",
+        name: "Data Structures & Algorithms in C/C++",
         organization: "Udemy",
-        issueDate: "2023-02-10",
-        credentialUrl: "https://www.cncf.io/certification/cka/",
+        issueDate: "2024-02-10",
       },
       {
         id: "3",
@@ -75,6 +73,12 @@ export default function Certifications() {
         organization: "CipherSchools",
         issueDate: "2024-07-20",
         Certificate_ID: 'CS2024-11578',
+      },
+      {
+        id: "4",
+        name: "Competitive Programming — 500+ Problems Solved",
+        organization: "LeetCode • GeeksforGeeks • HackerRank • CodeChef",
+        issueDate: "",
       },
     ]
   }
