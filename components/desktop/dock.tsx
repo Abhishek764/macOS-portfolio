@@ -17,6 +17,7 @@ interface DockProps {
   openLinkedInProfile: () => void
   openGitHubProfile: () => void
   openLeetCodeProfile: () => void
+  onDockWindowClick: (windowId: string, openFn: () => void) => void
 }
 
 interface DockItem {
@@ -28,9 +29,9 @@ interface DockItem {
 }
 
 // ─── macOS Dock Magnification Constants ───
-const BASE_SIZE = 50         // Default icon size (px)
-const MAX_SIZE = 96          // Fully magnified icon size (px)
-const MAGNIFICATION_RANGE = 200  // Distance (px) for magnification falloff
+const BASE_SIZE = 52         // Default icon size (px)
+const MAX_SIZE = 92          // Fully magnified icon size (px)
+const MAGNIFICATION_RANGE = 180  // Distance (px) for magnification falloff
 
 /**
  * Cosine-based magnification — the exact curve real macOS uses.
@@ -46,7 +47,7 @@ function getMagnifiedSize(distance: number): number {
 export default function Dock({
   windows, openAboutWindow, openProjectsWindow, openResumeWindow, openContactWindow,
   openGalleryWindow, openCertificationsWindow, openTerminalWindow, openWallpaperSettingsWindow,
-  openLinkedInProfile, openGitHubProfile, openLeetCodeProfile,
+  openLinkedInProfile, openGitHubProfile, openLeetCodeProfile, onDockWindowClick,
 }: DockProps) {
   const [mouseX, setMouseX] = useState<number | null>(null)
   const dockRef = useRef<HTMLDivElement>(null)
@@ -68,7 +69,7 @@ export default function Dock({
 
   const IconImg = useMemo(() => {
     const Img = ({ src, alt }: { src: string; alt: string }) => (
-      <img src={src} alt={alt} className="w-full h-full object-cover rounded-xl" draggable={false} />
+      <img src={src} alt={alt} className="w-full h-full object-cover" style={{ borderRadius: "22.5%" }} draggable={false} />
     )
     Img.displayName = "IconImg"
     return Img
@@ -83,7 +84,7 @@ export default function Dock({
     { id: "photos", label: "Photos", windowId: "gallery", onClick: openGalleryWindow, icon: <IconImg src="/icons/photos.png" alt="Photos" /> },
     "separator",
     { id: "linkedin", label: "LinkedIn", onClick: openLinkedInProfile, icon: (
-      <div className="w-full h-full rounded-xl bg-gradient-to-br from-[#0077b5] to-[#005582] flex items-center justify-center">
+      <div className="w-full h-full bg-gradient-to-br from-[#0077b5] to-[#005582] flex items-center justify-center" style={{ borderRadius: "22.5%" }}>
         <Linkedin className="w-7 h-7 text-white" />
       </div>
     )},
@@ -102,42 +103,48 @@ export default function Dock({
      * The outer container is pointer-events-none so only the glass area captures hover.
      */
     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
-      {/* 
+      {/*
        * Glass shelf — `items-end` pins every icon to the bottom edge,
        * so magnified icons grow upward (exactly like real macOS).
+       * Extra bottom padding leaves room for the running-app indicator dots.
        */}
       <div
         ref={dockRef}
-        className="relative flex items-end gap-[3px] py-[5px] px-[10px] bg-white/15 dark:bg-white/10 backdrop-blur-2xl rounded-[18px] border border-white/25 dark:border-white/18 dock-glass pointer-events-auto"
+        className="relative flex items-end gap-[4px] pt-[6px] pb-[11px] px-[9px] bg-white/15 dark:bg-white/10 backdrop-blur-2xl rounded-[20px] border border-white/25 dark:border-white/18 dock-glass pointer-events-auto"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
         {items.map((item, i) => {
           if (item === "separator") {
-            return <div key={`sep-${i}`} className="mx-[3px] h-10 w-px bg-white/25 self-center shrink-0" />
+            return <div key={`sep-${i}`} className="mx-[4px] h-[52px] w-px bg-white/25 self-center shrink-0" />
           }
 
           const idx = iconIndex++
 
-          // Calculate magnified size for this icon
+          // Calculate magnified size + hover state for this icon
+          const iconEl = iconRefs.current[idx]
+          const center = iconEl ? iconEl.getBoundingClientRect().left + iconEl.getBoundingClientRect().width / 2 : null
           let size = BASE_SIZE
-          if (mouseX !== null) {
-            const icon = iconRefs.current[idx]
-            if (icon) {
-              const rect = icon.getBoundingClientRect()
-              const center = rect.left + rect.width / 2
-              size = getMagnifiedSize(Math.abs(mouseX - center))
-            }
+          if (mouseX !== null && center !== null) {
+            size = getMagnifiedSize(Math.abs(mouseX - center))
           }
 
           const isRunning = item.windowId && windows.some((w) => w.id === item.windowId)
-          const showTooltip = mouseX !== null && size > BASE_SIZE + 10
+          // Tooltip only on the icon actually under the cursor, like macOS
+          const showTooltip = mouseX !== null && center !== null && Math.abs(mouseX - center) < BASE_SIZE / 2
 
           return (
             <button
               key={item.id}
               ref={(el) => { iconRefs.current[idx] = el }}
-              onClick={(e) => { animateBounce(e); item.onClick() }}
+              onClick={(e) => {
+                animateBounce(e)
+                if (item.windowId) {
+                  onDockWindowClick(item.windowId, item.onClick)
+                } else {
+                  item.onClick()
+                }
+              }}
               className="dock-icon relative flex flex-col items-center"
               style={{
                 width: `${size}px`,
@@ -154,7 +161,7 @@ export default function Dock({
             >
               {/* Tooltip */}
               <span
-                className="absolute left-1/2 -translate-x-1/2 px-3 py-1 bg-[#1a1a1a]/90 text-white text-xs rounded-md pointer-events-none whitespace-nowrap backdrop-blur-sm shadow-lg z-50"
+                className="absolute left-1/2 -translate-x-1/2 px-2.5 py-1 bg-[#1a1a1a]/85 text-white text-[12px] font-medium rounded-md pointer-events-none whitespace-nowrap backdrop-blur-sm shadow-lg z-50"
                 style={{
                   bottom: `${size + 8}px`,
                   opacity: showTooltip ? 1 : 0,
@@ -167,15 +174,15 @@ export default function Dock({
 
               {/* Icon */}
               <div
-                className="rounded-xl overflow-hidden shadow-sm"
-                style={{ width: '100%', height: '100%' }}
+                className="overflow-hidden shadow-sm"
+                style={{ width: '100%', height: '100%', borderRadius: "22.5%" }}
               >
                 {item.icon}
               </div>
 
-              {/* Running indicator */}
+              {/* Running indicator — sits inside the dock, below the icon */}
               {isRunning && (
-                <div className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] rounded-full bg-white/80" />
+                <div className="absolute bottom-[-7px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] rounded-full bg-white/90 shadow-[0_0_2px_rgba(0,0,0,0.4)]" />
               )}
             </button>
           )

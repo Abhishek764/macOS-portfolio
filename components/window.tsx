@@ -14,6 +14,7 @@ interface WindowProps {
   position: { x: number; y: number }
   size: { width: number; height: number }
   onClose: () => void
+  onMinimize: () => void
   onFocus: () => void
   onDrag: (position: { x: number; y: number }) => void
   onResize: (size: { width: number; height: number }) => void
@@ -25,7 +26,7 @@ type ResizeDirection =
   | null
 
 export default function Window({
-  id, title, icon, children, isActive, position, size, onClose, onFocus, onDrag, onResize,
+  id, title, icon, children, isActive, position, size, onClose, onMinimize, onFocus, onDrag, onResize,
 }: WindowProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
@@ -36,6 +37,7 @@ export default function Window({
   const [prevSize, setPrevSize] = useState({ width: 0, height: 0 })
   const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 })
   const [isClosing, setIsClosing] = useState(false)
+  const [isMinimizing, setIsMinimizing] = useState(false)
   const [isOpening, setIsOpening] = useState(true)
   const [trafficLightsHovered, setTrafficLightsHovered] = useState(false)
 
@@ -161,6 +163,11 @@ export default function Window({
     setTimeout(() => onClose(), 200)
   }
 
+  const handleMinimize = () => {
+    setIsMinimizing(true)
+    setTimeout(() => onMinimize(), 280)
+  }
+
   const getCursorStyle = (d: ResizeDirection): string => {
     switch (d) {
       case "top": case "bottom": return "ns-resize"
@@ -186,9 +193,9 @@ export default function Window({
   return (
     <div
       ref={windowRef}
-      className={`absolute rounded-xl overflow-hidden flex flex-col ${
-        isActive ? "macos-window-shadow z-10" : "macos-window-shadow-inactive z-0"
-      } ${isClosing ? "window-closing" : ""} ${isOpening ? "window-opening" : ""}`}
+      className={`absolute rounded-[10px] overflow-hidden flex flex-col ring-1 ${
+        isActive ? "macos-window-shadow z-10 ring-black/20 dark:ring-white/10" : "macos-window-shadow-inactive z-0 ring-black/10 dark:ring-white/5"
+      } ${isClosing ? "window-closing" : ""} ${isMinimizing ? "window-minimizing" : ""} ${isOpening ? "window-opening" : ""}`}
       style={{
         left: `${position.x}px`, top: `${position.y}px`,
         width: `${size.width}px`, height: `${size.height}px`,
@@ -200,7 +207,7 @@ export default function Window({
     >
       {/* Title Bar */}
       <div
-        className={`flex items-center px-3 h-[38px] shrink-0 select-none relative ${
+        className={`flex items-center px-3 h-[28px] shrink-0 select-none relative ${
           isActive
             ? "bg-[#e8e6e8]/95 dark:bg-[#3a3a3c]/95 border-b border-black/10 dark:border-white/8"
             : "bg-[#f6f6f6]/90 dark:bg-[#2a2a2c]/90 border-b border-black/5 dark:border-white/5"
@@ -211,7 +218,7 @@ export default function Window({
       >
         {/* Traffic Lights */}
         <div
-          className="flex items-center gap-[7px] mr-3 z-10"
+          className="flex items-center gap-[8px] mr-3 z-10"
           onMouseEnter={() => setTrafficLightsHovered(true)}
           onMouseLeave={() => setTrafficLightsHovered(false)}
         >
@@ -228,7 +235,7 @@ export default function Window({
             className={`w-[12px] h-[12px] rounded-full flex items-center justify-center transition-all duration-100 ${
               isActive ? "bg-[#febc2e] shadow-[inset_0_0_0_0.5px_rgba(0,0,0,0.12)]" : "bg-[#ddd] dark:bg-[#555]"
             } hover:brightness-90`}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); handleMinimize() }}
             aria-label="Minimize window"
           >
             {trafficLightsHovered && <Minus size={7} strokeWidth={3} className="text-[#995700]" />}
@@ -250,7 +257,7 @@ export default function Window({
             {icon}
             <span
               id={`window-title-${id}`}
-              className={`text-[13px] font-medium truncate ${
+              className={`text-[13px] font-semibold truncate ${
                 isActive ? "text-gray-800 dark:text-gray-200" : "text-gray-400 dark:text-gray-500"
               }`}
             >

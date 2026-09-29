@@ -35,8 +35,12 @@ export default function MenuBar({ onToggleWidgets, areWidgetsVisible }: MenuBarP
     return () => document.removeEventListener("mousedown", handleClick)
   }, [])
 
-  const formattedDate = currentTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
   const formattedTime = currentTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true })
+  // macOS-style date: "Fri Sep 28" (no comma)
+  const weekday = currentTime.toLocaleDateString("en-US", { weekday: "short" })
+  const month = currentTime.toLocaleDateString("en-US", { month: "short" })
+  const day = currentTime.getDate()
+  const formattedDate = `${weekday} ${month} ${day}`
 
   const toggleTheme = () => {
     const newDark = !isDark
@@ -49,8 +53,8 @@ export default function MenuBar({ onToggleWidgets, areWidgetsVisible }: MenuBarP
     <button
       className={`px-2 py-0.5 rounded-[4px] text-[13px] transition-colors ${
         activeMenu === id
-          ? "bg-blue-500/90 text-white"
-          : "hover:bg-black/5 dark:hover:bg-white/10 text-gray-900 dark:text-gray-200"
+          ? "bg-white/25 text-white"
+          : "hover:bg-white/15 text-white"
       }`}
       onMouseDown={(e) => {
         e.stopPropagation()
@@ -90,7 +94,7 @@ export default function MenuBar({ onToggleWidgets, areWidgetsVisible }: MenuBarP
   return (
     <div
       ref={menuBarRef}
-      className="h-[26px] bg-white/70 dark:bg-black/50 backdrop-blur-2xl border-b border-black/10 dark:border-white/8 flex items-center justify-between px-4 z-50 shrink-0 select-none"
+      className="absolute top-0 inset-x-0 h-[26px] bg-black/25 dark:bg-black/45 backdrop-blur-xl flex items-center justify-between px-4 z-50 shrink-0 select-none"
     >
       {/* Left */}
       <div className="flex items-center gap-1">
@@ -99,7 +103,7 @@ export default function MenuBar({ onToggleWidgets, areWidgetsVisible }: MenuBarP
           <MenuButton
             id="apple"
             label={
-              <svg className="w-[14px] h-[14px] fill-current" viewBox="0 0 16 16">
+              <svg className="w-[14px] h-[14px] fill-current text-white" viewBox="0 0 16 16">
                 <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516.024.034 1.52.087 2.475-1.258.955-1.345.762-2.391.728-2.43zm3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422.212-2.189 1.675-2.789 1.698-2.854.023-.065-.597-.79-1.254-1.157a3.692 3.692 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56.244.729.625 1.924 1.273 2.796.576.984 1.34 1.667 1.659 1.899.319.232 1.219.386 1.843.067.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758.347-.79.505-1.217.473-1.282z" />
               </svg>
             }
@@ -117,7 +121,7 @@ export default function MenuBar({ onToggleWidgets, areWidgetsVisible }: MenuBarP
           )}
         </div>
 
-        <span className="text-[13px] font-semibold text-gray-900 dark:text-white ml-3 mr-2">Portfolio</span>
+        <span className="text-[13px] font-semibold text-white ml-3 mr-2 drop-shadow-[0_0_2px_rgba(0,0,0,0.3)]">Portfolio</span>
 
         <div className="hidden md:flex items-center gap-0.5">
           <div className="relative">
@@ -172,24 +176,33 @@ export default function MenuBar({ onToggleWidgets, areWidgetsVisible }: MenuBarP
       </div>
 
       {/* Right */}
-      <div className="flex items-center gap-2.5">
-        <div className="hidden sm:flex items-center gap-2">
-          <Battery size={16} className="text-gray-700 dark:text-gray-300" />
-          <Wifi size={14} className="text-gray-700 dark:text-gray-300" />
-          <Search size={14} className="text-gray-700 dark:text-gray-300" />
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 text-white/95">
+          <span className="hidden sm:flex items-center gap-0.5">
+            <Battery size={17} className="text-white/95" />
+            <span className="text-[12px] tabular-nums text-white/90">100%</span>
+          </span>
+          <Wifi size={15} className="text-white/95" />
+          <Search size={14} className="text-white/95" />
         </div>
 
         {/* Control Center */}
         <div className="relative">
           <button
             className={`p-0.5 rounded transition-colors ${
-              activeMenu === "control-center" ? "bg-blue-500/90" : "hover:bg-black/5 dark:hover:bg-white/10"
+              activeMenu === "control-center" ? "bg-white/25" : "hover:bg-white/15"
             }`}
             onClick={() => setActiveMenu(activeMenu === "control-center" ? null : "control-center")}
+            aria-label="Control Center"
           >
-            <div className="flex items-center gap-0.5">
-              <div className="w-[6px] h-[6px] bg-gray-600 dark:bg-gray-300 rounded-full" />
-              <div className="w-[6px] h-[6px] bg-gray-600 dark:bg-gray-300 rounded-full" />
+            {/* Two-pill Control Center glyph */}
+            <div className="flex items-center gap-[2.5px]">
+              <div className="w-[8px] h-[13px] rounded-full bg-white/95 flex items-start justify-center pt-[2px]">
+                <div className="w-[4px] h-[4px] rounded-full bg-black/70" />
+              </div>
+              <div className="w-[8px] h-[13px] rounded-full bg-white/60 flex items-end justify-center pb-[2px]">
+                <div className="w-[4px] h-[4px] rounded-full bg-black/50" />
+              </div>
             </div>
           </button>
           {activeMenu === "control-center" && (
@@ -230,7 +243,7 @@ export default function MenuBar({ onToggleWidgets, areWidgetsVisible }: MenuBarP
           )}
         </div>
 
-        <span className="text-[13px] text-gray-800 dark:text-gray-200 tabular-nums">
+        <span className="text-[13px] text-white tabular-nums drop-shadow-[0_0_2px_rgba(0,0,0,0.3)]">
           {formattedDate} {formattedTime}
         </span>
       </div>

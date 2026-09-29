@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-import SystemStatusWidget from "@/components/widgets/system-status"
-import NotesWidget from "@/components/widgets/notes"
+import ClockWidget from "@/components/widgets/clock"
 
 interface WidgetData {
   id: string
@@ -41,9 +40,10 @@ export default function WidgetsContainer({
                 touchAction: "none",
               }}
               onMouseDown={(e) => {
+                const target = e.target as HTMLElement
                 if (
-                  e.target === e.currentTarget ||
-                  (e.target as HTMLElement).classList.contains("widget-drag-handle")
+                  target === e.currentTarget ||
+                  target.closest(".widget-drag-handle")
                 ) {
                   const startX = e.clientX
                   const startY = e.clientY
@@ -79,10 +79,9 @@ export default function WidgetsContainer({
                 }
               }}
             >
-              {widget.id === "system-status" && (
-                <SystemStatusWidget onClose={() => toggleWidgetVisibility(widget.id)} />
+              {widget.id === "clock" && (
+                <ClockWidget onClose={() => toggleWidgetVisibility(widget.id)} />
               )}
-              {widget.id === "notes" && <NotesWidget onClose={() => toggleWidgetVisibility(widget.id)} />}
             </div>
           ),
       )}

@@ -74,15 +74,11 @@ body {
 @keyframes windowOpen {
   0% {
     opacity: 0;
-    transform: scale(0.5);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.02);
+    transform: scale(0.9) translateY(8px);
   }
   100% {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
 }
 
@@ -97,13 +93,35 @@ body {
   }
 }
 
+/* Genie-style minimize — window sucks down toward the dock */
+@keyframes windowMinimize {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.25) translateY(70vh);
+  }
+}
+
 .window-opening {
-  animation: windowOpen 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: windowOpen 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .window-closing {
   animation: windowClose 0.2s ease-in forwards;
   pointer-events: none;
+}
+
+.window-minimizing {
+  animation: windowMinimize 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
+  pointer-events: none;
+}
+
+/* Desktop icon labels — white text with shadow, like Finder on a photo wallpaper */
+.desktop-icon-label {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 1px rgba(0, 0, 0, 0.5);
 }
 
 /* Window shadow transitions */

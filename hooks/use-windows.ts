@@ -9,6 +9,7 @@ interface WindowData {
   icon: React.ReactNode
   content: React.ReactNode
   isActive: boolean
+  minimized: boolean
   position: { x: number; y: number }
   size: { width: number; height: number }
 }
@@ -32,10 +33,11 @@ export function useWindows() {
         const existingWindowIndex = prev.findIndex((w) => w.id === id)
 
         if (existingWindowIndex >= 0) {
-          // If window exists, just make it active
+          // If window exists, restore it (un-minimize) and make it active
           const newWindows = [...prev]
           const [activeWindow] = newWindows.splice(existingWindowIndex, 1)
           activeWindow.isActive = true
+          activeWindow.minimized = false
 
           // Make all other windows inactive
           const updatedWindows = newWindows.map((w) => ({ ...w, isActive: false }))
@@ -46,7 +48,7 @@ export function useWindows() {
           // Otherwise create a new window
           return [
             ...prev.map((w) => ({ ...w, isActive: false })),
-            { id, title, icon, content, isActive: true, position, size },
+            { id, title, icon, content, isActive: true, minimized: false, position, size },
           ]
         }
       })
@@ -59,6 +61,31 @@ export function useWindows() {
    */
   const closeWindow = useCallback((id: string) => {
     setWindows((prev) => prev.filter((window) => window.id !== id))
+  }, [])
+
+  /**
+   * Minimizes a window (hidden from the desktop, still running in the dock)
+   */
+  const minimizeWindow = useCallback((id: string) => {
+    setWindows((prev) => prev.map((window) => (window.id === id ? { ...window, minimized: true, isActive: false } : window)))
+  }, [])
+
+  /**
+   * Restores a minimized window and brings it to the front
+   */
+  const restoreWindow = useCallback((id: string) => {
+    setWindows((prev) => {
+      const windowIndex = prev.findIndex((w) => w.id === id)
+      if (windowIndex === -1) return prev
+
+      const newWindows = [...prev]
+      const [activeWindow] = newWindows.splice(windowIndex, 1)
+      activeWindow.isActive = true
+      activeWindow.minimized = false
+
+      const updatedWindows = newWindows.map((w) => ({ ...w, isActive: false }))
+      return [...updatedWindows, activeWindow]
+    })
   }, [])
 
   /**
@@ -108,6 +135,8 @@ export function useWindows() {
     windows,
     openWindow,
     closeWindow,
+    minimizeWindow,
+    restoreWindow,
     setActiveWindow,
     updateWindowPosition,
     updateWindowSize,

@@ -9,6 +9,7 @@ interface WindowData {
   icon: React.ReactNode
   content: React.ReactNode
   isActive: boolean
+  minimized: boolean
   position: { x: number; y: number }
   size: { width: number; height: number }
 }
@@ -16,15 +17,18 @@ interface WindowData {
 interface WindowManagerProps {
   windows: WindowData[]
   onClose: (id: string) => void
+  onMinimize: (id: string) => void
   onFocus: (id: string) => void
   onDrag: (id: string, position: { x: number; y: number }) => void
   onResize: (id: string, size: { width: number; height: number }) => void
 }
 
-export default function WindowManager({ windows, onClose, onFocus, onDrag, onResize }: WindowManagerProps) {
+export default function WindowManager({ windows, onClose, onMinimize, onFocus, onDrag, onResize }: WindowManagerProps) {
   return (
     <>
-      {windows.map((window) => (
+      {windows
+        .filter((window) => !window.minimized)
+        .map((window) => (
         <Window
           key={window.id}
           id={window.id}
@@ -34,6 +38,7 @@ export default function WindowManager({ windows, onClose, onFocus, onDrag, onRes
           position={window.position}
           size={window.size}
           onClose={() => onClose(window.id)}
+          onMinimize={() => onMinimize(window.id)}
           onFocus={() => onFocus(window.id)}
           onDrag={(position) => onDrag(window.id, position)}
           onResize={(size) => onResize(window.id, size)}

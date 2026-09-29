@@ -11,8 +11,7 @@ interface WidgetData {
 export function useWidgets() {
   const [areWidgetsVisible, setAreWidgetsVisible] = useState(true)
   const [widgets, setWidgets] = useState<WidgetData[]>([
-    { id: "system-status", visible: true, position: { x: window.innerWidth - 300, y: 50 } },
-    { id: "notes", visible: true, position: { x: window.innerWidth - 300, y: 300 } },
+    { id: "clock", visible: true, position: { x: 20, y: 30 } },
   ])
 
   // Load widget settings from localStorage on mount
@@ -24,18 +23,15 @@ export function useWidgets() {
         setAreWidgetsVisible(savedWidgetsVisible === "true")
       }
 
-      // Load widget positions from local storage
-      const savedWidgets = localStorage.getItem("widgets")
+      // Load widget positions from local storage (v3: clock-only)
+      const savedWidgets = localStorage.getItem("widgets-v3")
       if (savedWidgets) {
         setWidgets(JSON.parse(savedWidgets))
       } else {
-        // Initialize widget positions on the right side if not saved
-        const rightSideWidgets = [
-          { id: "system-status", visible: true, position: { x: window.innerWidth - 300, y: 50 } },
-          { id: "notes", visible: true, position: { x: window.innerWidth - 300, y: 300 } },
-        ]
-        setWidgets(rightSideWidgets)
-        localStorage.setItem("widgets", JSON.stringify(rightSideWidgets))
+        // Initialize the clock in the top-left corner
+        const clockWidget = [{ id: "clock", visible: true, position: { x: 20, y: 30 } }]
+        setWidgets(clockWidget)
+        localStorage.setItem("widgets-v3", JSON.stringify(clockWidget))
       }
     } catch (error) {
       console.error("Error loading widget preferences:", error)
@@ -45,7 +41,7 @@ export function useWidgets() {
   // Save widget positions when they change
   useEffect(() => {
     try {
-      localStorage.setItem("widgets", JSON.stringify(widgets))
+      localStorage.setItem("widgets-v3", JSON.stringify(widgets))
     } catch (error) {
       console.error("Error saving widget positions:", error)
     }
