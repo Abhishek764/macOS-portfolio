@@ -14,7 +14,7 @@ interface WidgetsContainerProps {
   areWidgetsVisible: boolean
   updateWidgetPosition: (id: string, position: { x: number; y: number }) => void
   toggleWidgetVisibility: (id: string) => void
-  desktopRef: React.RefObject<HTMLDivElement>
+  desktopRef: React.RefObject<HTMLDivElement | null>
 }
 
 export default function WidgetsContainer({
