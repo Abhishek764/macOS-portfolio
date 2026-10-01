@@ -203,6 +203,7 @@ export default function Window({
       onClick={onFocus}
       tabIndex={0}
       role="dialog"
+      aria-modal="false"
       aria-labelledby={`window-title-${id}`}
     >
       {/* Title Bar */}

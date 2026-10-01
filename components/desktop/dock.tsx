@@ -146,6 +146,7 @@ export default function Dock({
                 }
               }}
               className="dock-icon relative flex flex-col items-center"
+              title={item.label}
               style={{
                 width: `${size}px`,
                 height: `${size}px`,

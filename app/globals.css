@@ -6,11 +6,17 @@
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
   --accent-color: 0, 122, 255;
+  --glass-fill: rgba(255, 255, 255, 0.68);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-separator: rgba(0, 0, 0, 0.08);
 }
 
 .dark {
   --foreground-rgb: 255, 255, 255;
   --background-rgb: 17, 24, 39;
+  --glass-fill: rgba(36, 36, 38, 0.76);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-separator: rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -280,6 +286,58 @@ body {
   background: white;
   color: rgba(0,0,0,0.85);
   box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.04);
+}
+
+/* ═══════════════════════════════════════════
+   PREMIUM PORTFOLIO SURFACES
+   ═══════════════════════════════════════════ */
+.portfolio-card {
+  contain: layout paint;
+}
+
+.portfolio-reveal {
+  opacity: 0;
+  animation: portfolioReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes portfolioReveal {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--accent-color));
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .macos-window-shadow,
+  .macos-window-shadow-inactive {
+    max-width: calc(100vw - 16px);
+    max-height: calc(100vh - 54px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .portfolio-reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .dock-bounce {
+    animation: none;
+  }
 }
 .dark .segmented-control button.active {
   background: rgba(255,255,255,0.18);
