@@ -6,14 +6,15 @@ import Terminal from "@/components/terminal"
 import PhotoGallery from "@/components/photo-gallery"
 import Certifications from "@/components/certifications"
 import SystemPreferences from "@/components/system-preferences"
-import { User, Folder, HardDrive } from "lucide-react"
-import { FaReact, FaDocker, FaAws, FaJenkins } from "react-icons/fa"
-import { SiSolidity, SiKubernetes, SiTerraform } from "react-icons/si"
+import { User, Folder, HardDrive, Sparkles, Phone, Mail, Linkedin, Github } from "lucide-react"
 
 import WindowManager from "@/components/desktop/window-manager"
 import Dock from "@/components/desktop/dock"
 import WidgetsContainer from "@/components/desktop/widgets-container"
 import ContextMenu from "@/components/desktop/context-menu"
+import WelcomeWindow from "@/components/portfolio/welcome-window"
+import AboutContent from "@/components/portfolio/about-content"
+import ProjectsContent from "@/components/portfolio/projects-content"
 
 import { useWindows } from "@/hooks/use-windows"
 import { useWidgets } from "@/hooks/use-widgets"
@@ -28,9 +29,10 @@ export default function Desktop() {
 
   const desktopRef = useRef<HTMLDivElement>(null)
   const isMountedRef = useRef(true)
-  const openGalleryWindowRef = useRef<() => void>()
-  const resetWallpaperRef = useRef<() => void>()
-  const openTerminalWindowRef = useRef<() => void>()
+  const openGalleryWindowRef = useRef<(() => void) | undefined>(undefined)
+  const resetWallpaperRef = useRef<(() => void) | undefined>(undefined)
+  const openTerminalWindowRef = useRef<(() => void) | undefined>(undefined)
+  const openContactWindowRef = useRef<(() => void) | undefined>(undefined)
   const [selectedIcon, setSelectedIcon] = useState<string | null>(null)
 
   useEffect(() => {
@@ -72,33 +74,7 @@ export default function Desktop() {
       "about",
       "About Me",
       <User size={16} />,
-      <div className="p-8 overflow-auto h-full bg-white dark:bg-[#1e1e1e]">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white tracking-tight">
-          About Me
-        </h2>
-        <p className="mb-6 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
-          I&apos;m <span className="font-semibold text-blue-600 dark:text-blue-400">Abhishek Kumar</span>, a DevOps engineer and full-stack developer with a strong foundation in modern web technologies and cloud-native infrastructure — spanning <span className="font-medium">CI/CD pipelines</span>, <span className="font-medium">infrastructure as code</span>, <span className="font-medium">GitOps</span>, and <span className="font-medium">AI-powered applications</span>.
-        </p>
-        <p className="mb-6 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
-          I&apos;m an active open-source contributor to <span className="font-medium">Open Library (Internet Archive)</span>, with two merged pull requests fixing a cross-thread race condition in FastAPI partials and modernizing core library modules.
-        </p>
-        <p className="mb-8 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300">
-          With a strong belief in continuous learning, clean architecture, and purposeful code, I&apos;m eager to contribute to high-impact teams driving digital transformation and technological innovation.
-        </p>
-
-        <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200 border-b pb-2 border-gray-200 dark:border-gray-700">
-          Skills & Tools
-        </h3>
-        <ul className="space-y-2 text-gray-700 dark:text-gray-300 text-[14px]">
-          <li className="flex items-center gap-2"><FaReact className="text-blue-500" /> <span className="font-medium">Full-stack Development</span> (Next.js, React, Node.js, FastAPI)</li>
-          <li className="flex items-center gap-2"><FaAws className="text-orange-500" /> <span className="font-medium">Cloud Platforms</span> (AWS — EKS, EC2, S3, Lambda, IAM, KMS, VPC)</li>
-          <li className="flex items-center gap-2"><FaDocker className="text-blue-400" /> <span className="font-medium">Containers & Orchestration</span> (Docker, Kubernetes, Helm, ArgoCD)</li>
-          <li className="flex items-center gap-2"><FaJenkins className="text-red-500" /> <span className="font-medium">CI/CD & DevSecOps</span> (Jenkins, GitOps, SonarQube, Trivy)</li>
-          <li className="flex items-center gap-2"><SiKubernetes className="text-blue-600" /> <span className="font-medium">Monitoring & Observability</span> (Prometheus, Grafana, exporters)</li>
-          <li className="flex items-center gap-2"><SiTerraform className="text-purple-500" /> <span className="font-medium">Infrastructure as Code</span> (Terraform, eksctl, GitOps)</li>
-          <li className="flex items-center gap-2"><SiSolidity className="text-gray-600 dark:text-gray-400" /> <span className="font-medium">AI & Agentic Systems</span> (LangChain, RAG, generative AI pipelines)</li>
-        </ul>
-      </div>,
+      <AboutContent onContact={() => openContactWindowRef.current?.()} />,
     )
   }, [openWindow])
 
@@ -107,82 +83,7 @@ export default function Desktop() {
       "projects",
       "Projects",
       <img src="/icons/code.png" alt="Projects" className="w-4 h-4" />,
-      <div className="p-6 overflow-auto h-full bg-white dark:bg-[#1e1e1e]">
-        <h2 className="text-xl font-semibold mb-5 text-gray-900 dark:text-gray-100">My Projects</h2>
-
-        <div className="space-y-4">
-          <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">macOS Portfolio</h3>
-              <span className="text-[10px] px-1.5 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full font-medium">Latest</span>
-            </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Next.js 15 • React 19 • Tailwind CSS • TypeScript</p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              A pixel-perfect macOS desktop simulator serving as a developer portfolio — complete with draggable windows, dock with physics-based magnification, terminal emulator, and system preferences.
-            </p>
-            <div className="flex gap-2">
-              <a href="https://abhiyad.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-xs bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white transition-colors">Live</a>
-              <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
-            </div>
-          </div>
-
-          <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">AI Music Generation SaaS</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Next.js 15 • TypeScript • FastAPI • AWS • Modal • HuggingFace • Inngest • BetterAuth</p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              Cloud-native SaaS generating original music from text prompts by orchestrating 3 generative AI models (ACE-Step, Qwen2-7B, SDXL-Turbo) on AWS. Cut wait time by 40% under peak load with a serverless GPU pipeline on Modal backed by Inngest async job queues and credit-based billing via BetterAuth.
-            </p>
-            <div className="flex gap-2">
-              <a href="https://github.com/Abhishek764/ACE-step-music-gen" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
-            </div>
-          </div>
-
-          <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">AskMedi: RAG Medical Agent</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Python • LangChain • OpenAI • Pinecone • Flask • AWS</p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              RAG-powered agent that retrieves source-grounded data from a structured medical corpus to recommend medicines for diagnosed symptoms — 35% higher accuracy over a keyword-search baseline and sub-2-second latency across 500+ test queries.
-            </p>
-            <div className="flex gap-2">
-              <a href="https://github.com/Abhishek764/AskMedi" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
-            </div>
-          </div>
-
-          <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Retail Microservices Platform</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Terraform • AWS EKS • Kubernetes • Helm • ArgoCD • GitOps • NGINX • Docker</p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              Production-pattern AWS EKS platform provisioned end-to-end with Terraform — VPC across 3 AZs, EKS Auto Mode, customer-managed KMS — with a GitOps bootstrap via ArgoCD so a single terraform apply stands up a self-syncing, self-healing deployment of 5 microservices behind NGINX ingress.
-            </p>
-            <div className="flex gap-2">
-              <a href="https://github.com/Abhishek764/Retail-Microservices-Platform" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
-            </div>
-          </div>
-
-          <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Starbucks DevSecOps CI/CD Pipeline</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Jenkins • Docker • Kubernetes (EKS) • SonarQube • Trivy • Prometheus • Grafana</p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              Jenkins CI/CD pipeline gating every deployment on static analysis (SonarQube) and container vulnerability scanning (Trivy) before promotion to AWS EKS — instrumented with Prometheus/Grafana and automated security-scan email reports on every build.
-            </p>
-            <div className="flex gap-2">
-              <a href="https://github.com/Abhishek764/starbucks-website-deployment" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
-            </div>
-          </div>
-
-          <div className="rounded-xl p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Blogging Website</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Node.js • Express.js • React.js • MongoDB • JWT</p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-              Full-featured blogging platform with JWT authentication, CRUD post management, a rich text editor, and a comments/likes system — validated end-to-end across 50 onboarded test users with Jest-based integration tests.
-            </p>
-            <div className="flex gap-2">
-              <a href="https://blogging-website-frontend-git-main-abhishek764s-projects.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-xs bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-md text-white transition-colors">Live</a>
-              <a href="https://github.com/Abhishek764/blogging-website-backend" target="_blank" rel="noopener noreferrer" className="text-xs bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 py-1.5 rounded-md text-gray-800 dark:text-white transition-colors">GitHub</a>
-            </div>
-          </div>
-        </div>
-      </div>,
+      <ProjectsContent />,
     )
   }, [openWindow])
 
@@ -368,28 +269,28 @@ export default function Desktop() {
         </p>
         <div className="space-y-4 text-sm">
           <a href="tel:+917645990776" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-            <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">📞</div>
+            <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center"><Phone size={17} className="text-green-600 dark:text-green-300" aria-hidden="true" /></div>
             <div>
               <p className="font-medium text-gray-900 dark:text-gray-100">Phone</p>
               <p className="text-blue-500">+91-7645990776</p>
             </div>
           </a>
           <a href="mailto:work.abhishek91@gmail.com" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">✉️</div>
+            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><Mail size={17} className="text-blue-600 dark:text-blue-300" aria-hidden="true" /></div>
             <div>
               <p className="font-medium text-gray-900 dark:text-gray-100">Email</p>
               <p className="text-blue-500">work.abhishek91@gmail.com</p>
             </div>
           </a>
           <a href="https://www.linkedin.com/in/abhiyad-dev/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">💼</div>
+            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><Linkedin size={17} className="text-blue-600 dark:text-blue-300" aria-hidden="true" /></div>
             <div>
               <p className="font-medium text-gray-900 dark:text-gray-100">LinkedIn</p>
               <p className="text-blue-500">linkedin.com/in/abhiyad-dev</p>
             </div>
           </a>
           <a href="https://github.com/Abhishek764" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-            <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">🐙</div>
+            <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"><Github size={17} className="text-gray-700 dark:text-gray-200" aria-hidden="true" /></div>
             <div>
               <p className="font-medium text-gray-900 dark:text-gray-100">GitHub</p>
               <p className="text-blue-500">github.com/Abhishek764</p>
@@ -467,12 +368,24 @@ export default function Desktop() {
   useEffect(() => { openGalleryWindowRef.current = openGalleryWindow }, [openGalleryWindow])
   useEffect(() => { resetWallpaperRef.current = resetWallpaper }, [resetWallpaper])
   useEffect(() => { openTerminalWindowRef.current = openTerminalWindow }, [openTerminalWindow])
+  useEffect(() => { openContactWindowRef.current = openContactWindow }, [openContactWindow])
 
-  // Open terminal after mount
+  // Open the welcome surface after boot/desktop mount
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isMountedRef.current) {
-        openTerminalWindowRef.current?.()
+        openWindow(
+          "welcome",
+          "Welcome",
+          <Sparkles size={16} />,
+          <WelcomeWindow
+            onOpenProjects={openProjectsWindow}
+            onOpenResume={openResumeWindow}
+            onOpenContact={() => openContactWindowRef.current?.()}
+          />,
+          { x: 240, y: 90 },
+          { width: 720, height: 520 },
+        )
       }
     }, 500)
     return () => clearTimeout(timer)
